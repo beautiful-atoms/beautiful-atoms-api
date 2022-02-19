@@ -9,11 +9,11 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="batoms_api",
-    version="0.1.4",
+    version="0.2.0",
     description="Drawing and rendering beautiful atoms, molecules using Blender.",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/superstar54/batoms_api",
+    url="https://github.com/superstar54/beautiful-atoms-api",
     author="Xing Wang",
     author_email="xingwang1991@gmail.com",
     license="GPL",
