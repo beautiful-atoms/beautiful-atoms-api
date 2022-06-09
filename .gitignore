@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 .batoms.inp
+.DS_Store
