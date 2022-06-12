@@ -13,7 +13,7 @@ setup(
     description="Drawing and rendering beautiful atoms, molecules using Blender.",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/superstar54/beautiful-atoms-api",
+    url="https://github.com/beautiful-atoms/beautiful-atoms-api",
     author="Xing Wang",
     author_email="xingwang1991@gmail.com",
     license="GPL",
@@ -23,6 +23,8 @@ setup(
     ],
     packages=find_packages(),
     entry_points={'console_scripts': ['batoms=batoms_api.cli.main:main']},
-    install_requires=[],
+    install_requires=[
+        "ruamel.yaml"
+    ],
     python_requires='>=3.7',
 )
