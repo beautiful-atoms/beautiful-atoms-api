@@ -73,5 +73,5 @@ jobs:
       - name: Run test scripts in docker host
         run: |
           cd tests
-          docker run -v $(pwd):/workdir ghcr.io/beautiful-atoms/beautiful-atoms:blender${{ matrix.blender-version }} python ch4.py
+          docker run -v $(pwd):/workdir -u root:root ghcr.io/beautiful-atoms/beautiful-atoms:blender${{ matrix.blender-version }} python ch4.py
           
