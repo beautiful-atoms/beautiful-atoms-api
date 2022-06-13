@@ -1,0 +1,77 @@
+# Test the batoms plugin using test
+name: Test batoms-api package
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - workflow
+  pull_request:
+    branches:
+      - main
+      - develop
+      - workflow
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ghcr.io/beautiful-atoms/beautiful-atoms
+
+jobs:
+  in_container:
+    defaults:
+      run:
+        shell: bash
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Manually change these to match the blender image versions
+        blender-version: ["3.0", "3.1", "3.2"]
+    container:
+      image: ${{ env.IMAGE_NAME }}:blender${{ matrix.blender-version }}
+      options: --user root
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest batoms-api and test dependencies
+        run: |
+          $BLENDERPY -m pip install pytest==6.2.5 flake8 pytest-blender &&\
+          $BLENDERPY -m pip install .
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --exclude=batoms_api/script-api.py,batoms_api/api --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --exclude=batoms_api/script-api.py,batoms_api/api --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Run test scripts
+        run: |
+          cd tests
+          python ch4.py
+  on_host:
+    defaults:
+      run:
+        shell: bash
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Manually change these to match the blender image versions
+        blender-version: ["3.0", "3.1", "3.2"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install latest batoms-api and test dependencies
+        run: |
+          $BLENDERPY -m pip install pytest==6.2.5 flake8 pytest-blender &&\
+          $BLENDERPY -m pip install .
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --exclude=batoms_api/script-api.py,batoms_api/api --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --exclude=batoms_api/script-api.py,batoms_api/api --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Run test scripts in docker host
+        run: |
+          cd tests
+          docker run -v $(pwd):/workdir ${{ env.IMAGE_NAME }}:blender${{ matrix.blender-version }} python ch4.py
+          
