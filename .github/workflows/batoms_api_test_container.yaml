@@ -28,7 +28,7 @@ jobs:
         # Manually change these to match the blender image versions
         blender-version: ["3.0", "3.1", "3.2"]
     container:
-      image: ${{ env.IMAGE_NAME }}:blender${{ matrix.blender-version }}
+      image: ghcr.io/beautiful-atoms/beautiful-atoms:blender${{ matrix.blender-version }}
       options: --user root
     steps:
       - uses: actions/checkout@v2
@@ -73,5 +73,5 @@ jobs:
       - name: Run test scripts in docker host
         run: |
           cd tests
-          docker run -v $(pwd):/workdir ${{ env.IMAGE_NAME }}:blender${{ matrix.blender-version }} python ch4.py
+          docker run -v $(pwd):/workdir ghcr.io/beautiful-atoms/beautiful-atoms:blender${{ matrix.blender-version }} python ch4.py
           
