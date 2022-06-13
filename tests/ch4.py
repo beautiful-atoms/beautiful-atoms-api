@@ -12,6 +12,6 @@ batoms_input = {'label': 'nh3',
                 # 'bondsetting': {'C-H': [0, 2.0, 1, True]},
                 # 'polyhedrasetting': {'C':[[0.6, 0.0, 0.4, 0.3], 0.01]},
                 }
-render_input = {'viewport': [1, 1, 0], 'engine': 'eevee', 'output': 'figs/ch4.png',}
+render_input = {'viewport': [1, 1, 0], 'engine': 'cycles', 'output': 'figs/ch4.png',}
 render(atoms,batoms_input = batoms_input, render_input = render_input, display = False)
 
