@@ -4,8 +4,8 @@ import os
 
 def render(
     atoms,
-    # batoms_input={},
-    # render_input={},
+    batoms_input={},
+    render_input={},
     settings={},
     post_modifications=[],
     display=False,
@@ -17,8 +17,16 @@ def render(
     render_input: input parameters to create the Render object
     post_modifications: list of commands to be evaluated following the given sequences
     """
+    preferences = {
+        "atoms": atoms,
+        "batoms_input": batoms_input,
+        "render_input": render_input,
+        "settings": settings,
+        "post_modifications": post_modifications,
+    }
     with open(".batoms.inp", "wb") as f:
-        pickle.dump([atoms, settings, post_modifications], f)
+        pickle.dump(preferences, f, protocol=0)
+        # pickle.dump([atoms, settings, post_modifications], f)
         # pickle.dump([atoms, batoms_input, render_input, settings, post_modifications], f)
     #
     blender_cmd = "blender"

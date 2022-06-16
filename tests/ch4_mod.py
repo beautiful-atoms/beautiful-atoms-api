@@ -22,22 +22,33 @@ atoms = atoms * [2, 2, 2]
     # "batoms.render.resolution = [200, 200]",
 # ]
 render(atoms, 
-    #    batoms_input=batoms_input, 
+       batoms_input={
+           "label": "ch4_mod"
+       },
+       render_input={
+       },
     #    render_input=render_input, 
        settings={
            "batoms":{
             #    "label": "ch4",
-               "model_style": 1,
+               "model_style": 2,
            },
            "render":{
-               "viewport": [2, 2, 0],
+               "viewport": [2, 1, 1],
                "engine": "cycles",
-               "output": "figs/ch4_mod.png",
-               "resolution": [200, 200],
+            #    "output": "figs/ch4_mod.png",
+               "resolution": [500, 500],
+               "samples": 10,
            },
            "bonds": {
                "setting":
-               {("C", "H"): {"order": 2, "width": 0.2}}
+               {("C", "H"): {"order": 2, "width": 0.2, "polyhedra": True},
+               ("C", "C"): {"order": 2, "width": 0.2, "polyhedra": True}
+               }
+           },
+           "polyhedras":
+           {
+               "draw": {}
            }
        },
        display=False, 

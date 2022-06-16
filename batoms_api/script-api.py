@@ -18,10 +18,11 @@ def run():
     """
     with open(".batoms.inp", "rb") as f:
         # atoms, batoms_input, render_input, settings, post_modifications = pickle.load(f)
-        atoms, settings, post_modifications = pickle.load(f)
-        # if "label" not in batoms_input:
-            # batoms_input["label"] = "batoms"
-        batoms = Batoms(from_ase=atoms)
+        # atoms, settings, post_modifications = pickle.load(f)
+        preferences = pickle.load(f)
+        atoms = preferences["atoms"]
+        batoms_input = preferences.get("batoms_input", {})
+        batoms = Batoms(from_ase=atoms, **batoms_input)
         # Handle the setting parts, may be a little tricky
         # There are two types of parameters:
         # 1. batoms itself, direct intialization
@@ -31,14 +32,18 @@ def run():
         # YAML parser need to distinguish between the levels that are used
         # TODO: add global lighting / plane setting
         # TODO: add file io settings
+        settings = preferences.get("settings", {})
         for prop_name, prop_setting in settings.items():
             # TODO prototype API check
             print(prop_name, prop_setting)
             if prop_name == "batoms":
                 prop_obj = batoms
+                # do not change label after creation
+                prop_setting.pop("label", None)
                 for key, value in prop_setting.items():
                     print(key, value, type(value))
                     setattr(prop_obj, key, value)
+                print(prop_obj)
                     # setattr(prop_obj, key, type_convert({}, value))
             elif prop_name in ["render", "boundary"]:
                 prop_obj = getattr(batoms, prop_name)
@@ -60,8 +65,11 @@ def run():
                             draw_params = False
                     else:
                         raise ValueError(f"Unknown sub_prop_setting {sub_prop_setting}")
-                if draw_params:
-                    prop_obj.draw(**draw_params)
+                if draw_params is not False:
+                    if hasattr(prop_obj, "draw"):
+                        prop_obj.draw(**draw_params)
+                    else:
+                        batoms.draw()
                 print(prop_obj)
 
 
@@ -72,13 +80,16 @@ def run():
         #         val_string = f"_obj.{key}"
         #         handle = eval(val_string, {}, {"_obj": prop_obj})
         #         handle = value
+        post_modifications = preferences.get("post_modifications", [])
         for mod in post_modifications:
             # TODO: sanity check of expression?
             blender_globals.update({"batoms": batoms, "np": np})
             exec(mod, blender_globals)
-        # batoms.get_image(**render_input)
+        render_input = preferences.get("render_input", {})
         # Force run self
-        batoms.render.run(batoms)
+        batoms.draw()
+        # batoms.render.run(batoms)
+        batoms.get_image(**render_input)
         return
             
 
