@@ -18,13 +18,11 @@ setup(
     author_email="xingwang1991@gmail.com",
     license="GPL",
     classifiers=[
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3.7",
     ],
     packages=find_packages(),
-    entry_points={'console_scripts': ['batoms=batoms_api.cli.main:main']},
-    install_requires=[
-        "ruamel.yaml"
-    ],
-    python_requires='>=3.7',
+    entry_points={"console_scripts": ["batoms=batoms_api.cli.main:main"]},
+    install_requires=["ruamel.yaml"],
+    python_requires=">=3.7",
 )

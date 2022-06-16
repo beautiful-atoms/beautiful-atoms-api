@@ -4,11 +4,12 @@ import os
 
 def render(
     atoms,
-    batoms_input={},
-    render_input={},
+    # batoms_input={},
+    # render_input={},
+    settings={},
+    post_modifications=[],
     display=False,
     queue=None,
-    post_modifications=[],
 ):
     """
     atoms: an ASE atoms object
@@ -17,7 +18,8 @@ def render(
     post_modifications: list of commands to be evaluated following the given sequences
     """
     with open(".batoms.inp", "wb") as f:
-        pickle.dump([atoms, batoms_input, render_input, post_modifications], f)
+        pickle.dump([atoms, settings, post_modifications], f)
+        # pickle.dump([atoms, batoms_input, render_input, settings, post_modifications], f)
     #
     blender_cmd = "blender"
     if "BLENDER_COMMAND" in os.environ.keys():
