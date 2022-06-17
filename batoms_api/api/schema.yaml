@@ -1,11 +1,11 @@
 batoms_input:
   label: {_type: _str}
-  pbc: {_type: (_bool, _list)}
+  pbc: {_type: [_bool, _list]}
   location: {_type: _list}
   scale: {_type: _float}
   model_style: {_disabled: true}
   polyhedra_style: {_disabled: true}
-  radius_style: {_type: (_int, _float)}
+  radius_style: {_type: [_int, _str]}
   movie: {_type: _bool}
 
 render_input:
@@ -25,8 +25,8 @@ settings:
     pbc: { _type: _list, _edit_member: false }
     model_style: { _type: _int }
     polyhedra_style: { _type: _int }
-    radius_style: { _type: (_str, _int) }
-    color_style: { _type: (_str, _int) }
+    radius_style: { _type: [_str, _int] }
+    color_style: { _type: [_str, _int] }
     wrap: { _type: _list, _edit_member: false }
     size: { _type: _list, _edit_member: false }
     scale: { _type: _list, _edit_member: false }
@@ -57,7 +57,7 @@ settings:
         max: { _type: _float }
         search: { _type: _int }
         order: { _type: _int }
-        style: { _type: (_int, _str) }
+        style: { _type: [_int, _str] }
         polyhedra: { _type: _bool }
 
   ribbon: {}

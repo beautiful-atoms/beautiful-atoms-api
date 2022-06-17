@@ -1,5 +1,9 @@
 import pickle
 import os
+from pathlib import Path
+
+MODULE_ROOT = Path(__file__).parent.resolve()
+SCHEMA_DIR = MODULE_ROOT / "api"
 
 
 def render(

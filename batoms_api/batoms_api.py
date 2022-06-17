@@ -1,8 +1,4 @@
-from cgi import test
-from typing import OrderedDict
-from matplotlib.pyplot import subplots_adjust
 from ruamel_yaml import YAML
-from sympy import Order
 from . import MODULE_ROOT, SCHEMA_DIR
 from warnings import warn
 from collections import OrderedDict
@@ -10,6 +6,15 @@ from collections import OrderedDict
 DEFAULT_SCHEMA = SCHEMA_DIR / "schema.yaml"
 
 schema = YAML(pure=True).load(DEFAULT_SCHEMA)
+
+TYPE_MAPPING = {
+    "_int": int,
+    "_float": float,
+    "_list": list,
+    "_dict": dict,
+    "_str": str,
+    "_bool": bool,
+}
 
 def load_yaml_config(custom_yaml, schema=schema):
     """Load yaml from a custom yaml file and validate using schema
@@ -26,8 +31,21 @@ def type_check(value, allowed_type):
     2. if allowed_type is single instance, try convert 
     if all pass, return the value, or raise Exception
     """
-    warn("Not implemented")
-    return value
+    # warn("Not implemented")
+    python_types = []
+    if isinstance(allowed_type, str):
+        allowed_type = [allowed_type]
+    for typ in allowed_type:
+        python_types.append(TYPE_MAPPING[typ])
+    if isinstance(value, tuple(python_types)):
+        return value
+    elif len(python_types) == 1:
+        try:
+            return python_types[0](value)
+        except ValueError as e:
+            raise Exception(f"Cannot convert {value} to type {python_types[0]}") from e
+    else:
+        raise ValueError("Cannot perform type conversion for multiple types!")
 
 
 def set_dict(raw_dict, output_dict, schema):
@@ -36,7 +54,7 @@ def set_dict(raw_dict, output_dict, schema):
     schema = schema.copy()
     raw_dict = raw_dict.copy()
     for key, value in raw_dict.items():
-        print(key, value)
+        # print(key, value)
         # "_any" in schema key can accept any entry
         # 1. evaluate the key is necessary
         # 2. test if new key is valid in schema
@@ -49,7 +67,8 @@ def set_dict(raw_dict, output_dict, schema):
                 # Evaluate the key like "('C', 'H')" --> ('C', 'H')
                 if schema["_any"].get("_eval_key", False):
                     key = eval(str(key))
-                    sub_schema = schema["_any"]
+                # This subschema accepts any key value
+                sub_schema = schema["_any"]
         else:
             sub_schema = schema[key]
         # breakpoint()
@@ -75,6 +94,11 @@ if __name__ == "__main__":
             {
                 "setting":
                 {"('C', 'H')": {"order": 2}}
+            },
+            "polyhedras":
+            {
+                "setting":
+                {"C": {"color": [0.1, 0.1, 0.1, 1.0]}}
             }
         }
         }
