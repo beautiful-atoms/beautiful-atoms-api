@@ -75,3 +75,5 @@ settings:
   ms: {}
   magres: {}
   cavity: {}
+
+post_modifications: {_type: _list }

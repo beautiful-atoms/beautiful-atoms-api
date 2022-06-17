@@ -100,7 +100,10 @@ if __name__ == "__main__":
                 "setting":
                 {"C": {"color": [0.1, 0.1, 0.1, 1.0]}}
             }
-        }
+        },
+        "post_modifications": [
+            "batoms.render.resolution = [200, 200]"
+        ]
         }
     output = {}
     set_dict(test_content, output, schema)
