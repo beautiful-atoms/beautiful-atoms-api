@@ -27,7 +27,8 @@ def run():
         # There are two types of parameters:
         # 1. batoms itself, direct intialization
         # 2. initializable objects: render, boundary. invoke as batoms.<obj> = ObjClass(param=param)
-        # 3. objects need setting: polyhedras, bonds, lattice_plane, crystal_shape, isosurfaces, cavity, ms, magres etc
+        # 3. requiring special treatment: species. Has "update" section
+        # 4. objects need setting: polyhedras, bonds, lattice_plane, crystal_shape, isosurfaces, cavity, ms, magres etc
         #    an ObjectSetting instance needs to be updated. Usage batoms.<obj>.setting[key] = setting_dict
         # YAML parser need to distinguish between the levels that are used
         # TODO: add global lighting / plane setting

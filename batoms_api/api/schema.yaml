@@ -1,0 +1,77 @@
+batoms_input:
+  label: {_type: _str}
+  pbc: {_type: (_bool, _list)}
+  location: {_type: _list}
+  scale: {_type: _float}
+  model_style: {_disabled: true}
+  polyhedra_style: {_disabled: true}
+  radius_style: {_type: (_int, _float)}
+  movie: {_type: _bool}
+
+render_input:
+  viewport: {_type: _list}
+  frame: {_type: _int}
+  animation: {_type: bool}
+  output: {_type: _str}
+  center: {_type: _bool}
+  canvas: {_disabled: true}
+  gpu: {_type: _bool}
+
+settings:
+  batoms:
+    label: { _disabled: true }
+    cell: { _type: _list }
+    boundary: { _type: _list }
+    pbc: { _type: _list, _edit_member: false }
+    model_style: { _type: _int }
+    polyhedra_style: { _type: _int }
+    radius_style: { _type: (_str, _int) }
+    color_style: { _type: (_str, _int) }
+    wrap: { _type: _list, _edit_member: false }
+    size: { _type: _list, _edit_member: false }
+    scale: { _type: _list, _edit_member: false }
+
+  render:
+    viewport: { _type: _list }
+    engine: { _type: _str }
+    output: { _type: _str }
+    animation: { _type: _bool }
+    gpu: { _type: _bool }
+    run_render: { _type: _bool }
+    resolution: { _type: _list }
+    studiolight: { _type: _str }
+    samples: { _type: _int }
+
+  species:
+    _any:
+      color: { _type: _list, _edit_member: false }
+      material_style: { _type: _str }
+      scale: { _type: _float }
+    update: { _type: _bool }
+
+  bonds:
+    setting:
+      _any:
+        _eval_key: true
+        min: { _type: _float }
+        max: { _type: _float }
+        search: { _type: _int }
+        order: { _type: _int }
+        style: { _type: (_int, _str) }
+        polyhedra: { _type: _bool }
+
+  ribbon: {}
+  polyhedras:
+    setting:
+      _any:
+        show_edge: { _type: _bool }
+        color: { _type: _list }
+        width: { _type: _float }
+        material_style: { _type: _str, _disabled: true }
+
+  isosurfaces: {}
+  lattice_plane: {}
+  crystal_shape: {}
+  ms: {}
+  magres: {}
+  cavity: {}
