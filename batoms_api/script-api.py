@@ -57,7 +57,8 @@ def run():
                     if sub_prop_name == "setting":
                         sub_prop_obj = prop_obj.setting
                         # sub_prop_setting is by default a dict
-                        sub_prop_obj = sub_prop_setting
+                        for key, value in sub_prop_setting.items():
+                            sub_prop_obj[key] = value
                     elif sub_prop_name == "draw":
                         if sub_prop_setting is not False:
                             draw_params = sub_prop_setting
@@ -87,7 +88,10 @@ def run():
             exec(mod, blender_globals)
         render_input = preferences.get("render_input", {})
         # Force run self
+        print(batoms.bonds)
+        print(batoms.bonds.setting)
         batoms.draw()
+
         # batoms.render.run(batoms)
         batoms.get_image(**render_input)
         return
