@@ -1,5 +1,7 @@
 import pytest
+from pathlib import Path
 from typing import Dict
+curdir = Path(__file__).parent.resolve()
 
 
 def test_value_conversion():
@@ -62,3 +64,50 @@ def test_dict_set():
     )
     assert "bond" not in output["settings"].keys()
 
+def test_disabled_vals():
+    from batoms_api.batoms_api import set_dict, schema
+
+    # Test if disabled fields are prevented from loading
+    output = {}
+    set_dict(
+        {
+            "batoms_input": {
+                "polyhedra_style": 1,
+                "model_style": 1,
+                "radius_style": "1",
+            }
+        },
+        output,
+        schema,
+    )
+    assert "polyhedra_style" not in output["batoms_input"].keys()
+    assert "model_style" not in output["batoms_input"].keys()
+    assert "radius_style" in output["batoms_input"].keys()
+
+    # Special case: batoms label should be an initializer instead of modifier
+    # therefore providing label to `settings.batoms` will be ignored
+    output = {}
+    set_dict(
+        {
+            "batoms_input": {
+                "label": "mol-1"
+            },
+            "settings":
+            {
+                "batoms": {"label": "mol-2"}
+            }
+        },
+        output,
+        schema,
+    )
+    assert output["batoms_input"]["label"] == "mol-1"
+    assert "label" not in output["settings"]["batoms"]
+    
+
+
+
+def test_yaml_load():
+    from batoms_api.batoms_api import load_yaml_config
+    yaml_file = open((curdir / "example.yaml"), "r")
+    config = load_yaml_config(yaml_file)
+    assert ("C", "H") in config["settings"]["bonds"]["setting"].keys()

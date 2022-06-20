@@ -73,7 +73,9 @@ def set_dict(raw_dict, output_dict, schema):
             sub_schema = schema[key]
         # breakpoint()
         # Determine if we have eached the leaf node
-        if "_type" in sub_schema.keys():
+        if "_disabled" in sub_schema.keys():
+            warn(f"Key {key} is disabled in current scope, ignore.")
+        elif "_type" in sub_schema.keys():
             allowed_type = sub_schema["_type"]
             # Reached a leaf node
             output_dict[key] = type_check(value, allowed_type)

@@ -1,21 +1,21 @@
 batoms_input:
-  label: {_type: _str}
-  pbc: {_type: [_bool, _list]}
-  location: {_type: _list}
-  scale: {_type: _float}
-  model_style: {_disabled: true}
-  polyhedra_style: {_disabled: true}
-  radius_style: {_type: [_int, _str]}
-  movie: {_type: _bool}
+  label: { _type: _str }
+  pbc: { _type: [_bool, _list] }
+  location: { _type: _list }
+  scale: { _type: _float }
+  model_style: { _disabled: true }
+  polyhedra_style: { _disabled: true }
+  radius_style: { _type: [_int, _str] }
+  movie: { _type: _bool }
 
 render_input:
-  viewport: {_type: _list}
-  frame: {_type: _int}
-  animation: {_type: bool}
-  output: {_type: _str}
-  center: {_type: _bool}
-  canvas: {_disabled: true}
-  gpu: {_type: _bool}
+  viewport: { _type: _list }
+  frame: { _type: _int }
+  animation: { _type: bool }
+  output: { _type: _str }
+  center: { _type: _bool }
+  canvas: { _disabled: true }
+  gpu: { _type: _bool }
 
 settings:
   batoms:
@@ -69,11 +69,11 @@ settings:
         width: { _type: _float }
         material_style: { _type: _str, _disabled: true }
 
-  isosurfaces: {}
+  isosurfaces: {}                                                                               
   lattice_plane: {}
   crystal_shape: {}
   ms: {}
   magres: {}
   cavity: {}
 
-post_modifications: {_type: _list }
+post_modifications: { _type: _list }

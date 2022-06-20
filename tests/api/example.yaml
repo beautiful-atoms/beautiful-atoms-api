@@ -1,0 +1,18 @@
+batoms_input:
+  label: "ch4"
+  location: [10.0, 10.0, 10.0]
+  model_style: 0
+  polyhedra_style: 0
+  radius_style: 1
+
+settings:
+  species:
+    C:
+      material_style: "metallic"
+    H:
+      material_style: "plastic"
+  bonds:
+    setting:
+      ("C", "H"):
+        order: 2
+        polyhedra: true
