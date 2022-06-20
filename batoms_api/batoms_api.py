@@ -1,8 +1,12 @@
+from imageio import save
 from ruamel_yaml import YAML
-from . import MODULE_ROOT, SCHEMA_DIR
+from . import MODULE_ROOT, SCHEMA_DIR, __version__, THIS_MODULE_NAME
 from warnings import warn
 from collections import OrderedDict
+import pickle
 from mergedeep import merge, Strategy
+from pathlib import Path
+import os
 
 
 DEFAULT_SCHEMA = SCHEMA_DIR / "schema.yaml"
@@ -101,9 +105,86 @@ def merge_dicts(origin_dict, update_dict, schema=default_schema):
     merged = merge({}, sane_origin_dict, sane_update_dict)
     return merged
 
+def blender_run(input_file, blender_command=None, command_prefix=""):
+    """Run the blender file using given input file
+    Basic usage
+    blender -b batoms_api.script_api -- input_file_path
+    """
+    raise NotImplementedError("")
 
-def render():
-    pass
+    
+
+
+def render(
+    atoms,
+    volume=None,
+    batoms_input={},
+    render_input={},
+    settings={},
+    post_modifications=[],
+    config_file=None,
+    display=False,
+    queue=None,
+    save_input_file=False,
+):
+    """
+    atoms: an ASE atoms object
+    volume: ASE compatible volume object, default is None
+    batoms_input: input parameters to create the Batoms object (i.e. those can be passed to Batoms.__init__)
+    render_input: input parameters to create the Render object (i.e. those can be passed to Batoms.get_image)
+    settings: extra settings that modify the attributes of the batoms object.
+    post_modifications: list of commands to be evaluated following the given order
+    config_file: default configuration yaml file to load from.
+                 parameters `batoms_input` `render_input` `settings` and `post_modifications` overwrite default config
+    save_input_file: if True, saves to `.batoms.inp` on cwd; otherwise if given a specifc name, save to that name
+    """
+    if config_file is not None:
+        default_config = load_yaml_config(config_file)
+    else:
+        default_config = {}
+
+    user_config = {
+        "batoms_input": batoms_input,
+        "render_input": render_input,
+        "settings": settings,
+        "post_modifications": post_modifications,
+    }
+
+    merged_config = merge_dicts(default_config, user_config)
+
+    config = {
+        "atoms": atoms,
+        "volume": volume,
+        **merged_config
+    }
+
+    input_file = Path(".batoms.inp").resolve()
+    if save_input_file and isinstance(save_input_file, (str, Path)):
+            input_file = Path(save_input_file)
+    
+
+    with open(input_file, "wb") as f:
+        pickle.dump(config, f, protocol=0)
+
+    blender_run(input_file)
+
+    if not save_input_file:
+        os.remove(input_file)
+    #
+    blender_cmd = "blender"
+    if "BLENDER_COMMAND" in os.environ.keys():
+        blender_cmd = os.environ["BLENDER_COMMAND"]
+    root = os.path.normpath(os.path.dirname(__file__))
+    script = os.path.join(root, "script-api.py")
+    if display:
+        cmd = blender_cmd + " -P " + script
+    elif queue == "SLURM":
+        cmd = "srun -n $SLURM_NTASKS " + blender_cmd + " -b " + " -P " + script
+    else:
+        cmd = blender_cmd + " -b " + " -P " + script
+    errcode = os.system(cmd)
+    if errcode != 0:
+        raise OSError("Command " + cmd + " failed with error code %d" % errcode)
 
 
 if __name__ == "__main__":
