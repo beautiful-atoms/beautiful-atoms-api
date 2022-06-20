@@ -1,4 +1,7 @@
-from batoms import Batoms
+try:
+    from batoms import Batoms
+except ImportError as e:
+    raise ImportError(("batoms_api.script_api must be run within the blender environment!")) from e
 import numpy as np
 import pickle
 
