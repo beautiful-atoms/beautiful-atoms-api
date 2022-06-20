@@ -20,9 +20,12 @@ setup(
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     packages=find_packages(),
     entry_points={"console_scripts": ["batoms=batoms_api.cli.main:main"]},
-    install_requires=["ruamel.yaml"],
+    install_requires=["ruamel.yaml", "mergedeep==1.3.4"],
     python_requires=">=3.7",
 )

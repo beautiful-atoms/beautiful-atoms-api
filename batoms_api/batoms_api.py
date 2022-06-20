@@ -102,6 +102,10 @@ def merge_dicts(origin_dict, update_dict, schema=default_schema):
     return merged
 
 
+def render():
+    pass
+
+
 if __name__ == "__main__":
     test_content = {
         "batoms_input": {"label": "ch4", "pbc": [1, 2, 3]},
