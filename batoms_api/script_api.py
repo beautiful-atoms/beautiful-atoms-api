@@ -1,17 +1,33 @@
 try:
     from batoms import Batoms
 except ImportError as e:
-    raise ImportError(("batoms_api.script_api must be run within the blender environment!")) from e
+    raise ImportError(
+        ("batoms_api.script_api must be run within the blender environment!")
+    ) from e
 import numpy as np
 import pickle
+import sys
+from . import __version__
+from copy import copy
 
 blender_globals = globals().copy()
 
 
-def type_convert(inheritance, value):
-    """Use the proper value conversion"""
-    # In the beginning no value conversion
-    return value
+def _handle_argv_extras():
+    """Special to blender usage. Parse the extra argv after '--' symbols
+    If no extra options provided, return None
+    """
+    argv = copy(sys.argv)
+    if "--" not in argv:
+        return None
+    else:
+        ind = argv.index("--")
+        if ind == len(argv) - 1:
+            raise ValueError("No arguments provided after the '--' symbols!")
+        elif len(argv) - ind > 2:
+            raise ValueError("batoms_api.script_api only accepts 1 positional argument")
+        else:
+            return argv[ind + 1]
 
 
 def run():
@@ -101,5 +117,12 @@ def run():
         return
 
 
+def main():
+    # run()
+    print(sys.argv)
+    extra_arg = _handle_argv_extras()
+    print(extra_arg)
+
+
 if __name__ == "__main__":
-    run()
+    main()

@@ -107,6 +107,7 @@ def merge_dicts(origin_dict, update_dict, schema=default_schema):
     merged = merge({}, sane_origin_dict, sane_update_dict)
     return merged
 
+
 def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("-b",)):
     """Run the blender file using given input file
     Basic usage
@@ -115,23 +116,33 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
     args_extras: series of args to put in between blender main command and sub commands, e.g. to control display
     """
     input_file = Path(input_file).resolve()
-    bl_sub_commands = ["--python-expr", "\"import batoms_api.script_api; script_api.run()\"", "--", input_file.as_posix()]
+    bl_sub_commands = [
+        "--python-exit-code",
+        "1",
+        "--python-expr",
+        '"from batoms_api import script_api; script_api.run()"',
+        "--",
+        input_file.as_posix(),
+    ]
     if blender_command is None:
         if "BLENDER_COMMAND" in os.environ.keys():
             blender_command = os.environ["BLENDER_COMMAND"]
         else:
             blender_command = "blender"
         bl_main_command = [str(blender_command)]
-        
-    full_args = list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
+
+    full_args = (
+        list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
+    )
     proc = run(full_args)
     if proc.returncode != 0:
         raise RuntimeError(
-            (f"Running following rendering script\n"
-            "{full_args}\n"
-            "fails with return code {proc.returncode}."))
-
-    
+            (
+                f"Running following rendering script\n"
+                "{full_args}\n"
+                "fails with return code {proc.returncode}."
+            )
+        )
 
 
 def render(
@@ -175,13 +186,12 @@ def render(
         "atoms": atoms,
         "volume": volume,
         "api_version": __version__,
-        **merged_config
+        **merged_config,
     }
 
     input_file = Path(".batoms.inp").resolve()
     if save_input_file and isinstance(save_input_file, (str, Path)):
-            input_file = Path(save_input_file)
-    
+        input_file = Path(save_input_file)
 
     with open(input_file, "wb") as f:
         pickle.dump(config, f, protocol=0)
@@ -191,14 +201,13 @@ def render(
         options["args_extras"] = []
     if queue:
         options["args_prefix"] = ["srun", "-n", "$SLURM_NTASKS"]
-    
+
     blender_run(input_file, **options)
 
     if not save_input_file:
         os.remove(input_file)
-    
+
     return
-    
 
 
 if __name__ == "__main__":
