@@ -1,3 +1,4 @@
+from dask import visualize
 from imageio import save
 from ruamel_yaml import YAML
 from . import MODULE_ROOT, SCHEMA_DIR, __version__, THIS_MODULE_NAME
@@ -7,6 +8,7 @@ import pickle
 from mergedeep import merge, Strategy
 from pathlib import Path
 import os
+from subprocess import run
 
 
 DEFAULT_SCHEMA = SCHEMA_DIR / "schema.yaml"
@@ -105,12 +107,29 @@ def merge_dicts(origin_dict, update_dict, schema=default_schema):
     merged = merge({}, sane_origin_dict, sane_update_dict)
     return merged
 
-def blender_run(input_file, blender_command=None, command_prefix=""):
+def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("-b",)):
     """Run the blender file using given input file
     Basic usage
     blender -b batoms_api.script_api -- input_file_path
+    args_prefix: series of args to put before blender, e.g. wrapper of docker command
+    args_extras: series of args to put in between blender main command and sub commands, e.g. to control display
     """
-    raise NotImplementedError("")
+    input_file = Path(input_file).resolve()
+    bl_sub_commands = ["--python-expr", "\"import batoms_api.script_api; script_api.run()\"", "--", input_file.as_posix()]
+    if blender_command is None:
+        if "BLENDER_COMMAND" in os.environ.keys():
+            blender_command = os.environ["BLENDER_COMMAND"]
+        else:
+            blender_command = "blender"
+        bl_main_command = [str(blender_command)]
+        
+    full_args = list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
+    proc = run(full_args)
+    if proc.returncode != 0:
+        raise RuntimeError(
+            (f"Running following rendering script\n"
+            "{full_args}\n"
+            "fails with return code {proc.returncode}."))
 
     
 
@@ -155,6 +174,7 @@ def render(
     config = {
         "atoms": atoms,
         "volume": volume,
+        "api_version": __version__,
         **merged_config
     }
 
@@ -166,25 +186,19 @@ def render(
     with open(input_file, "wb") as f:
         pickle.dump(config, f, protocol=0)
 
-    blender_run(input_file)
+    options = {}
+    if visualize:
+        options["args_extras"] = []
+    if queue:
+        options["args_prefix"] = ["srun", "-n", "$SLURM_NTASKS"]
+    
+    blender_run(input_file, **options)
 
     if not save_input_file:
         os.remove(input_file)
-    #
-    blender_cmd = "blender"
-    if "BLENDER_COMMAND" in os.environ.keys():
-        blender_cmd = os.environ["BLENDER_COMMAND"]
-    root = os.path.normpath(os.path.dirname(__file__))
-    script = os.path.join(root, "script-api.py")
-    if display:
-        cmd = blender_cmd + " -P " + script
-    elif queue == "SLURM":
-        cmd = "srun -n $SLURM_NTASKS " + blender_cmd + " -b " + " -P " + script
-    else:
-        cmd = blender_cmd + " -b " + " -P " + script
-    errcode = os.system(cmd)
-    if errcode != 0:
-        raise OSError("Command " + cmd + " failed with error code %d" % errcode)
+    
+    return
+    
 
 
 if __name__ == "__main__":
