@@ -1,14 +1,15 @@
 from batoms import Batoms
 import numpy as np
 import pickle
+
 blender_globals = globals().copy()
 
 
 def type_convert(inheritance, value):
-    """Use the proper value conversion 
-    """
+    """Use the proper value conversion"""
     # In the beginning no value conversion
     return value
+
 
 def run():
     """post_modifications are like `ase run --modify` parameters that are direct python expressions (use at your own risk!)
@@ -45,7 +46,7 @@ def run():
                     print(key, value, type(value))
                     setattr(prop_obj, key, value)
                 print(prop_obj)
-                    # setattr(prop_obj, key, type_convert({}, value))
+                # setattr(prop_obj, key, type_convert({}, value))
             elif prop_name in ["render", "boundary"]:
                 prop_obj = getattr(batoms, prop_name)
                 for key, value in prop_setting.items():
@@ -74,7 +75,6 @@ def run():
                         batoms.draw()
                 print(prop_obj)
 
-
         # for prop_name, setting in settings.items():
         #     # TODO: catch AttributeError
         #     prop_obj = getattr(batoms, prop_name)
@@ -96,7 +96,6 @@ def run():
         # batoms.render.run(batoms)
         batoms.get_image(**render_input)
         return
-            
 
 
 if __name__ == "__main__":

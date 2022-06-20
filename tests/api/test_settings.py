@@ -110,3 +110,33 @@ def test_yaml_load():
     assert "model_style" not in config["batoms_input"].keys()
     assert config["batoms_input"]["radius_style"] == 1
     assert ("C", "H") in config["settings"]["bonds"]["setting"].keys()
+
+
+def test_merge_dict():
+    from batoms_api.batoms_api import load_yaml_config, merge_dicts
+
+    yaml_file = open((curdir / "example.yaml"), "r")
+    config = load_yaml_config(yaml_file)
+    new_config = {
+        "batoms_input": {"label": "ch4_mod"},
+        "settings": {
+            "bonds": {
+                "setting": {
+                    ("C", "H"): {
+                        "order": 1,
+                    },
+                    ("C", "C"): {
+                        "order": 2,
+                        "polyhedra": False,
+                    },
+                }
+            }
+        },
+    }
+    merged = merge_dicts(config, new_config)
+    assert merged["batoms_input"]["label"] == "ch4_mod"
+    assert ("C", "C") in merged["settings"]["bonds"]["setting"].keys()
+    assert merged["settings"]["bonds"]["setting"][("C", "H")]["order"] == 1
+    assert merged["settings"]["bonds"]["setting"][("C", "C")]["order"] == 2
+    assert merged["settings"]["bonds"]["setting"][("C", "H")]["polyhedra"] is True
+    assert merged["settings"]["bonds"]["setting"][("C", "C")]["polyhedra"] is False

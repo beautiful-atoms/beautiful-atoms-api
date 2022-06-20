@@ -2,6 +2,8 @@ from ruamel_yaml import YAML
 from . import MODULE_ROOT, SCHEMA_DIR
 from warnings import warn
 from collections import OrderedDict
+from mergedeep import merge, Strategy
+
 
 DEFAULT_SCHEMA = SCHEMA_DIR / "schema.yaml"
 
@@ -89,6 +91,17 @@ def load_yaml_config(custom_yaml, schema=default_schema):
     return output_dict
 
 
+def merge_dicts(origin_dict, update_dict, schema=default_schema):
+    """Recursively merge two dicts with update_dict overwrites values in origin_dict.
+    Both dicts will be passed through schema checker
+    """
+    sane_origin_dict, sane_update_dict = {}, {}
+    set_dict(origin_dict.copy(), sane_origin_dict, schema)
+    set_dict(update_dict.copy(), sane_update_dict, schema)
+    merged = merge({}, sane_origin_dict, sane_update_dict)
+    return merged
+
+
 if __name__ == "__main__":
     test_content = {
         "batoms_input": {"label": "ch4", "pbc": [1, 2, 3]},
@@ -99,5 +112,5 @@ if __name__ == "__main__":
         "post_modifications": ["batoms.render.resolution = [200, 200]"],
     }
     output = {}
-    set_dict(test_content, output, schema)
+    set_dict(test_content, output, default_schema)
     print(output)
