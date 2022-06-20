@@ -1,6 +1,7 @@
 import pytest
 from pathlib import Path
 from typing import Dict
+
 curdir = Path(__file__).parent.resolve()
 
 
@@ -21,11 +22,11 @@ def test_value_conversion():
 
 
 def test_dict_set():
-    from batoms_api.batoms_api import set_dict, schema
+    from batoms_api.batoms_api import set_dict, default_schema
 
     # Test type conversion
     output = {}
-    set_dict({"batoms_input": {"scale": 1}}, output, schema)
+    set_dict({"batoms_input": {"scale": 1}}, output, default_schema)
     assert isinstance(output["batoms_input"]["scale"], float)
     # Type key converson (string to tuple)
     output = {}
@@ -36,7 +37,7 @@ def test_dict_set():
             }
         },
         output,
-        schema,
+        default_schema,
     )
     assert ("C", "H") in output["settings"]["bonds"]["setting"].keys()
     # Test if explicity python types can be added
@@ -48,7 +49,7 @@ def test_dict_set():
             }
         },
         output,
-        schema,
+        default_schema,
     )
     assert ("C", "H") in output["settings"]["bonds"]["setting"].keys()
     # Test wrong property name (should be `bonds`)
@@ -60,12 +61,13 @@ def test_dict_set():
             }
         },
         output,
-        schema,
+        default_schema,
     )
     assert "bond" not in output["settings"].keys()
 
+
 def test_disabled_vals():
-    from batoms_api.batoms_api import set_dict, schema
+    from batoms_api.batoms_api import set_dict, default_schema
 
     # Test if disabled fields are prevented from loading
     output = {}
@@ -78,7 +80,7 @@ def test_disabled_vals():
             }
         },
         output,
-        schema,
+        default_schema,
     )
     assert "polyhedra_style" not in output["batoms_input"].keys()
     assert "model_style" not in output["batoms_input"].keys()
@@ -89,25 +91,22 @@ def test_disabled_vals():
     output = {}
     set_dict(
         {
-            "batoms_input": {
-                "label": "mol-1"
-            },
-            "settings":
-            {
-                "batoms": {"label": "mol-2"}
-            }
+            "batoms_input": {"label": "mol-1"},
+            "settings": {"batoms": {"label": "mol-2"}},
         },
         output,
-        schema,
+        default_schema,
     )
     assert output["batoms_input"]["label"] == "mol-1"
     assert "label" not in output["settings"]["batoms"]
-    
-
 
 
 def test_yaml_load():
     from batoms_api.batoms_api import load_yaml_config
+
     yaml_file = open((curdir / "example.yaml"), "r")
     config = load_yaml_config(yaml_file)
+    assert "polyhedra_style" not in config["batoms_input"].keys()
+    assert "model_style" not in config["batoms_input"].keys()
+    assert config["batoms_input"]["radius_style"] == 1
     assert ("C", "H") in config["settings"]["bonds"]["setting"].keys()
