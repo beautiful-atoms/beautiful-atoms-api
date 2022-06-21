@@ -45,10 +45,10 @@ jobs:
       - name: Run unit tests
         run:
           python -m pytest -svv tests/api
-      - name: Run test scripts
-        run: |
-          cd tests
-          python ch4.py
+      # - name: Run test scripts
+      #   run: |
+      #     cd tests
+      #     python ch4.py
   # on_host:
   #   defaults:
   #     run:
