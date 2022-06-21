@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="batoms_api",
-    version="0.2.0",
+    version="0.3.0",
     description="Drawing and rendering beautiful atoms, molecules using Blender.",
     long_description=README,
     long_description_content_type="text/markdown",
