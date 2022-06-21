@@ -128,23 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
-# batoms 
-*.batoms.inp
-# Images
-*.png
-# atomic structures
-*.in
-*.xyz
-*.pdb
-*.cif
-*.poscar
-*.x3d
-*.obj
-*.mtl
-*.fbx
-
-#test/
-.vscode/*
-*/.vscode/*
-
+.batoms.inp
