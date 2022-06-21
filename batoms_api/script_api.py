@@ -12,6 +12,12 @@ except ImportError as e:
     raise ImportError(
         ("batoms_api.script_api must be run within the blender environment!")
     ) from e
+try:
+    import bpy
+except ImportError as e:
+    raise ImportError(
+        ("batoms_api.script_api must be run within the blender environment!")
+    ) from e
 from distutils.version import StrictVersion
 from warnings import warn
 from multiprocessing.sharedctypes import Value
@@ -148,6 +154,9 @@ def run():
 
     batoms.get_image(**render_input)
     # TODO: add option to save .blend file
+    bpy.ops.wm.save_as_mainfile(
+        filepath=input_file.with_suffix(".blend").resolve().as_posix()
+    )
     return
 
 

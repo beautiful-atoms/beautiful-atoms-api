@@ -218,8 +218,16 @@ if __name__ == "__main__":
         "settings": {
             "model_style": 2,
             "species": {
-                "C": {"color": [1, 0.1, 0.1, 1.0], "material_style": "metallic"},
-                "H": {"material_style": "plastic", "color": [0.5, 0.5, 0.5, 1.0]},
+                "C": {
+                    "color": [1, 0.1, 0.1, 1.0],
+                    # "material_style": "metallic",
+                    "scale": 0.7,
+                },
+                "H": {
+                    "material_style": "plastic",
+                    "color": [0, 0.5, 0.5, 1.0],
+                    "scale": 0.2,
+                },
             },
             "bonds": {"setting": {"('C', 'H')": {"polyhedra": True}}},
             "polyhedras": {"setting": {"C": {"color": [1, 0.1, 0.1, 0.1]}}},
