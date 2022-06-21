@@ -1,14 +1,12 @@
-from dask import visualize
-from imageio import save
-from ruamel_yaml import YAML
-from . import MODULE_ROOT, SCHEMA_DIR, __version__, THIS_MODULE_NAME
-from warnings import warn
-from collections import OrderedDict
-import pickle
-from mergedeep import merge, Strategy
-from pathlib import Path
 import os
+import pickle
+from warnings import warn
+from pathlib import Path
 from subprocess import run
+from collections import OrderedDict
+from ruamel_yaml import YAML
+from mergedeep import merge, Strategy
+from .metadata import SCHEMA_DIR, __version__
 
 
 DEFAULT_SCHEMA = SCHEMA_DIR / "schema.yaml"
@@ -120,7 +118,7 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
         "--python-exit-code",
         "1",
         "--python-expr",
-        '"from batoms_api import script_api; script_api.run()"',
+        "from batoms_api import script_api; script_api.run()",
         "--",
         input_file.as_posix(),
     ]
@@ -134,12 +132,13 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
     full_args = (
         list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
     )
+    print(full_args)
     proc = run(full_args)
     if proc.returncode != 0:
         raise RuntimeError(
             (
-                f"Running following rendering script\n"
-                "{full_args}\n"
+                "Running following rendering script\n"
+                f"{full_args}\n"
                 "fails with return code {proc.returncode}."
             )
         )
@@ -197,7 +196,7 @@ def render(
         pickle.dump(config, f, protocol=0)
 
     options = {}
-    if visualize:
+    if display:
         options["args_extras"] = []
     if queue:
         options["args_prefix"] = ["srun", "-n", "$SLURM_NTASKS"]
@@ -211,14 +210,16 @@ def render(
 
 
 if __name__ == "__main__":
+    from ase.build import molecule
+
+    mol = molecule("CH4")
     test_content = {
-        "batoms_input": {"label": "ch4", "pbc": [1, 2, 3]},
+        "batoms_input": {"label": "ch4", "pbc": False},
         "settings": {
-            "bonds": {"setting": {"('C', 'H')": {"order": 2}}},
+            "bonds": {"setting": {"('C', 'H')": {"polyhedra": True}}},
             "polyhedras": {"setting": {"C": {"color": [0.1, 0.1, 0.1, 1.0]}}},
+            "render": {"resolution": [200, 200], "engine": "cycles", "samples": 32},
         },
-        "post_modifications": ["batoms.render.resolution = [200, 200]"],
+        "post_modifications": ["batoms.location += [0, 0, 10]"],
     }
-    output = {}
-    set_dict(test_content, output, default_schema)
-    print(output)
+    render(mol, save_input_file="ch4.inp", **test_content)
