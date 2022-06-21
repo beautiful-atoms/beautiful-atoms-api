@@ -1,7 +1,7 @@
 from ase.io import read
 from ase.io.cube import read_cube_data
 from batoms.batoms import Batoms
-from batoms.utils.butils import removeAll
+from batoms.butils import removeAll
 import pickle
 import os
 
@@ -20,7 +20,7 @@ def main():
         ext = base[1]
         if ext == '.cube':
             cube = read(inputfile, index = '::%s'%(batoms_input['skip'] + 1),
-                        format='cube', read_data=True, full_output=True)[0]
+                        format='cube', read_data=True, full_output=True)
             volume = cube['data']
             atoms = cube['atoms']
             origin = cube['origin']
