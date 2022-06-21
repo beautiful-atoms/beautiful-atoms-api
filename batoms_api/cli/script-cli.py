@@ -1,7 +1,7 @@
 from ase.io import read
 from ase.io.cube import read_cube_data
 from batoms.batoms import Batoms
-from batoms.butils import removeAll
+from batoms.utils.butils import removeAll
 import pickle
 import os
 

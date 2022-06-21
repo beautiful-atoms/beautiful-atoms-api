@@ -8,6 +8,10 @@ from ruamel_yaml import YAML
 from mergedeep import merge, Strategy
 from .metadata import SCHEMA_DIR, __version__
 
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 
 DEFAULT_SCHEMA = SCHEMA_DIR / "schema.yaml"
 

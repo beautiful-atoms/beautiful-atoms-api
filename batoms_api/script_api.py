@@ -18,19 +18,22 @@ except ImportError as e:
     raise ImportError(
         ("batoms_api.script_api must be run within the blender environment!")
     ) from e
+import os
+import sys
+import pickle
 from distutils.version import StrictVersion
 from warnings import warn
 from multiprocessing.sharedctypes import Value
 import numpy as np
-import pickle
-import sys
 from pathlib import Path
-import os
-
+from copy import copy
 
 from .metadata import __version__
 from .batoms_api import default_schema
-from copy import copy
+
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 blender_globals = globals().copy()
 
