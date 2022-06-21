@@ -18,18 +18,17 @@ render_input:
   gpu: { _type: _bool }
 
 settings:
-  batoms:
-    label: { _disabled: true }
-    cell: { _type: _list }
-    boundary: { _type: _list }
-    pbc: { _type: _list, _edit_member: false }
-    model_style: { _type: _int }
-    polyhedra_style: { _type: _int }
-    radius_style: { _type: [_str, _int] }
-    color_style: { _type: [_str, _int] }
-    wrap: { _type: _list, _edit_member: false }
-    size: { _type: _list, _edit_member: false }
-    scale: { _type: _list, _edit_member: false }
+  label: { _disabled: true }
+  cell: { _type: _list }
+  boundary: { _type: _list }
+  pbc: { _type: _list, _edit_member: false }
+  model_style: { _type: _int }
+  polyhedra_style: { _type: _int }
+  radius_style: { _type: [_str, _int] }
+  color_style: { _type: [_str, _int] }
+  wrap: { _type: _list, _edit_member: false }
+  size: { _type: _list, _edit_member: false }
+  scale: { _type: _list, _edit_member: false }
 
   render:
     viewport: { _type: _list }

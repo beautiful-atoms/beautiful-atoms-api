@@ -92,13 +92,13 @@ def test_disabled_vals():
     set_dict(
         {
             "batoms_input": {"label": "mol-1"},
-            "settings": {"batoms": {"label": "mol-2"}},
+            "settings": {"label": "mol-2"},
         },
         output,
         default_schema,
     )
     assert output["batoms_input"]["label"] == "mol-1"
-    assert "label" not in output["settings"]["batoms"]
+    assert "label" not in output["settings"]
 
 
 def test_yaml_load():

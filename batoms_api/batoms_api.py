@@ -139,7 +139,7 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
             (
                 "Running following rendering script\n"
                 f"{full_args}\n"
-                "fails with return code {proc.returncode}."
+                f"fails with return code {proc.returncode}."
             )
         )
 
@@ -216,8 +216,13 @@ if __name__ == "__main__":
     test_content = {
         "batoms_input": {"label": "ch4", "pbc": False},
         "settings": {
+            "model_style": 2,
+            "species": {
+                "C": {"color": [1, 0.1, 0.1, 1.0], "material_style": "metallic"},
+                "H": {"material_style": "plastic", "color": [0.5, 0.5, 0.5, 1.0]},
+            },
             "bonds": {"setting": {"('C', 'H')": {"polyhedra": True}}},
-            "polyhedras": {"setting": {"C": {"color": [0.1, 0.1, 0.1, 1.0]}}},
+            "polyhedras": {"setting": {"C": {"color": [1, 0.1, 0.1, 0.1]}}},
             "render": {"resolution": [200, 200], "engine": "cycles", "samples": 32},
         },
         "post_modifications": ["batoms.location += [0, 0, 10]"],
