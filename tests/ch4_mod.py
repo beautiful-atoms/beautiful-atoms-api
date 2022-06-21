@@ -19,38 +19,46 @@ atoms = atoms * [2, 2, 2]
 #     "output": "figs/ch4.png",
 # }
 # modifications = [
-    # "batoms.render.resolution = [200, 200]",
+# "batoms.render.resolution = [200, 200]",
 # ]
-render(atoms, 
-       batoms_input={
-           "label": "ch4_mod"
-       },
-       render_input={
-       },
-    #    render_input=render_input, 
-       settings={
-           "batoms":{
+render(
+    atoms,
+    batoms_input={"label": "ch4_mod"},
+    render_input={},
+    #    render_input=render_input,
+    settings={
+        "batoms": {
             #    "label": "ch4",
-               "model_style": 2,
-           },
-           "render":{
-               "viewport": [2, 1, 1],
-               "engine": "cycles",
+            "model_style": 2,
+            "polyhedra_style": 1,
+            "color_style": 1,
+        },
+        "render": {
+            "viewport": [2, 1, 1],
+            "engine": "cycles",
             #    "output": "figs/ch4_mod.png",
-               "resolution": [500, 500],
-               "samples": 10,
-           },
-           "bonds": {
-               "setting":
-               {("C", "H"): {"order": 2, "width": 0.2, "polyhedra": True},
-               ("C", "C"): {"order": 2, "width": 0.2, "polyhedra": True}
-               }
-           },
-           "polyhedras":
-           {
-               "draw": {}
-           }
-       },
-       display=False, 
+            "resolution": [500, 500],
+            "samples": 10,
+        },
+        "species": {
+            "C": {
+                "color": [0.1, 0.1, 0.5, 0.1],
+                "scale": 1.2,
+                "material_style": "metallic",
+            }
+        },
+        "bonds": {
+            "setting": {
+                ("C", "H"): {
+                    "polyhedra": True,
+                },
+                ("C", "C"): {"polyhedra": True},
+            }
+        },
+        "polyhedras": {
+            "setting": {"C": {"color": [0.4, 0.2, 0.3, 0.4], "width": 0.03}}
+        },
+    },
+    display=False,
 )
-    #    post_modifications=modifications)
+#    post_modifications=modifications)
