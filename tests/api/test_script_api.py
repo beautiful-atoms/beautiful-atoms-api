@@ -16,10 +16,17 @@ def test_version_check():
     # same version
     _check_version(__version__)
 
+
 def test_args_handler():
     import sys
     from batoms_api.script_api import _handle_argv_extras
-    blender_args_base = ["blender", "-b", "--python-expr", "from batoms_api import script_api; script_api.run()",]
+
+    blender_args_base = [
+        "blender",
+        "-b",
+        "--python-expr",
+        "from batoms_api import script_api; script_api.run()",
+    ]
     # No additional parameter provided, return None
     with patch.object(sys, "argv", blender_args_base):
         assert _handle_argv_extras() is None
@@ -35,6 +42,24 @@ def test_args_handler():
     with patch.object(sys, "argv", blender_args_base + ["--", ".batoms.inp"]):
         filename = _handle_argv_extras()
         assert filename == ".batoms.inp"
-    
-        
-    
+
+
+def test_apply_batoms_settings():
+    """This is not an exhaustive test for setting batoms but rather to test applying settins etc"""
+    from batoms_api.script_api import apply_batoms_settings
+    from batoms import Batoms
+    from ase.build import molecule
+
+    batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
+    # Test 1: test root level configs
+    config = {"label": "ch4_mod", "location": [0, 0, 10], "model_style": 2}
+    apply_batoms_settings(batoms, settings=config)
+    assert batoms.label != "ch4_mod"
+    assert batoms.location[-1] == 10
+    assert all(batoms.model_style == 2)
+    # Test 2: test direct property setting
+    config = {"render": {"engine": "cycles", "viewport": [1, 1, 0]}}
+    apply_batoms_settings(batoms, settings=config)
+    # cycles changed to capital
+    assert batoms.render.engine.lower() == "cycles"
+    assert all([i == j for i, j in zip(batoms.render.viewport, [1, 1, 0])])
