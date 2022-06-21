@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install latest batoms-api and test dependencies
         run: |
-          $BLENDERPY -m pip install pytest==6.2.5 flake8 &&\
+          $BLENDERPY -m pip install pytest==6.2.5 flake8 pytest_blender &&\
           $BLENDERPY -m pip install .
       - name: Lint with flake8
         run: |
