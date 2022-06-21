@@ -33,6 +33,6 @@ def test_cell():
 
 
 if __name__ == "__main__":
-    test_boundary()
+    test_cell()
     print("\n cell: All pass! \n")
 
