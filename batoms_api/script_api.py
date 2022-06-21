@@ -21,7 +21,7 @@ except ImportError as e:
 import os
 import sys
 import pickle
-from distutils.version import StrictVersion
+from packaging.version import Version
 from warnings import warn
 from multiprocessing.sharedctypes import Value
 import numpy as np
@@ -32,6 +32,7 @@ from .metadata import __version__
 from .batoms_api import default_schema
 
 import logging
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -70,13 +71,13 @@ def _get_input_file():
 
 
 def _check_version(input_api_version):
-    if StrictVersion(input_api_version) > StrictVersion(__version__):
+    if Version(input_api_version) > Version(__version__):
         raise ValueError(
-            f"Input file api version {input_api_version} does newer than current api version {__version__}!"
+            f"Input file api version {input_api_version} is newer than current api version {__version__}!"
         )
-    elif StrictVersion(input_api_version) > StrictVersion(__version__):
+    elif Version(input_api_version) < Version(__version__):
         warn(
-            f"Input file api version {input_api_version} does older than current api version {__version__}. There might be some incompatibilities."
+            f"Input file api version {input_api_version} is older than current api version {__version__}. There might be some incompatibilities."
         )
     else:
         pass

@@ -7,14 +7,11 @@ import logging
 
 from .metadata import __version__
 from .batoms_api import render
+
 logger = logging.getLogger(__name__)
 
-formatter = ('%(levelname)s '
-                    '[%(name)s %(funcName)s]: %(message)s')
-logging.basicConfig(stream=sys.stdout,
-                    format=formatter,
-                    level=logging.DEBUG
-                    )
+formatter = "%(levelname)s " "[%(name)s %(funcName)s]: %(message)s"
+logging.basicConfig(stream=sys.stdout, format=formatter, level=logging.DEBUG)
 # add logger file
 filepath = Path(gettempdir()) / ("beautiful_atoms_api.log")
 logger.info("Log file: " + str(filepath))
