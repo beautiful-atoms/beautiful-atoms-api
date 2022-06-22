@@ -126,6 +126,15 @@ def apply_batoms_modifications(batoms, post_modifications=[]):
         exec(mod, blender_globals, {"batoms": batoms, "np": np})
 
 
+def save_blender_file(input_file):
+    """Save the main .blend file under the same directory"""
+    input_file = Path(input_file)
+    bpy.ops.wm.save_as_mainfile(
+        filepath=input_file.with_suffix(".blend").resolve().as_posix()
+    )
+    return
+
+
 def run():
     """post_modifications are like `ase run --modify` parameters that are direct python expressions (use at your own risk!)
     format of post_modifications looks like follows:
@@ -143,6 +152,7 @@ def run():
     settings = config.get("settings", {})
     post_modifications = config.get("post_modifications", [])
     api_version = config.get("api_version", __version__)
+    save_bl = config.get("save_blender_file", False)
     # Only allow blender api_version >= input_api_version
     _check_version(api_version)
 
@@ -157,85 +167,10 @@ def run():
     batoms.draw()
 
     batoms.get_image(**render_input)
-    # TODO: add option to save .blend file
-    bpy.ops.wm.save_as_mainfile(
-        filepath=input_file.with_suffix(".blend").resolve().as_posix()
-    )
+    if save_bl:
+        save_blender_file(input_file)
     return
-
-
-# def main():
-#     # run()
-#     print(sys.argv)
-#     extra_arg = _handle_argv_extras()
-#     print(extra_arg)
 
 
 if __name__ == "__main__":
     run()
-
-
-##################
-# Old functions
-# Handle the setting parts, may be a little tricky
-# There are two types of parameters:
-# 1. batoms itself, direct intialization
-# 2. initializable objects: render, boundary. invoke as batoms.<obj> = ObjClass(param=param)
-# 3. requiring special treatment: species. Has "update" section
-# 4. objects need setting: polyhedras, bonds, lattice_plane, crystal_shape, isosurfaces, cavity, ms, magres etc
-#    an ObjectSetting instance needs to be updated. Usage batoms.<obj>.setting[key] = setting_dict
-# YAML parser need to distinguish between the levels that are used
-# TODO: add global lighting / plane setting
-# TODO: add file io settings
-# for prop_name, prop_setting in settings.items():
-#     # TODO prototype API check
-#     print(prop_name, prop_setting)
-#     if prop_name == "batoms":
-#         prop_obj = batoms
-#         # do not change label after creation
-#         prop_setting.pop("label", None)
-#         for key, value in prop_setting.items():
-#             print(key, value, type(value))
-#             setattr(prop_obj, key, value)
-#         print(prop_obj)
-#         # setattr(prop_obj, key, type_convert({}, value))
-#     elif prop_name in ["render", "boundary"]:
-#         prop_obj = getattr(batoms, prop_name)
-#         for key, value in prop_setting.items():
-#             setattr(prop_obj, key, value)
-#     else:
-#         # TODO: check if prop_name is valid
-#         prop_obj = getattr(batoms, prop_name)
-#         draw_params = {}
-#         for sub_prop_name, sub_prop_setting in prop_setting.items():
-#             if sub_prop_name == "setting":
-#                 sub_prop_obj = prop_obj.setting
-#                 # sub_prop_setting is by default a dict
-#                 for key, value in sub_prop_setting.items():
-#                     sub_prop_obj[key] = value
-#             elif sub_prop_name == "draw":
-#                 if sub_prop_setting is not False:
-#                     draw_params = sub_prop_setting
-#                 else:
-#                     draw_params = False
-#             else:
-#                 raise ValueError(f"Unknown sub_prop_setting {sub_prop_setting}")
-#         if draw_params is not False:
-#             if hasattr(prop_obj, "draw"):
-#                 prop_obj.draw(**draw_params)
-#             else:
-#                 batoms.draw()
-#         print(prop_obj)
-
-# for prop_name, setting in settings.items():
-#     # TODO: catch AttributeError
-#     prop_obj = getattr(batoms, prop_name)
-#     for key, value in setting.items():
-#         val_string = f"_obj.{key}"
-#         handle = eval(val_string, {}, {"_obj": prop_obj})
-#         handle = value
-# post_modifications = preferences.get("post_modifications", [])
-
-# render_input = preferences.get("render_input", {})
-# Force run self
-##################
