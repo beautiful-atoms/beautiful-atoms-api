@@ -29,6 +29,7 @@ settings:
   wrap: { _type: _list, _edit_member: false }
   size: { _type: _list, _edit_member: false }
   scale: { _type: _list, _edit_member: false }
+  location: { _type: _list, _edit_member: false }
 
   render:
     viewport: { _type: _list }
