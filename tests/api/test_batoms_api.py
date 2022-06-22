@@ -59,3 +59,36 @@ def test_pickle_content():
             "save_blender_file",
         ]:
             assert key in config.keys()
+
+
+def test_render_image():
+    from batoms_api import render
+    from ase.build import molecule
+    import tempfile
+
+    # base config
+    config = {
+        "settings": {
+            "render": {"engine": "cycles", "samples": 10, "resolution": [20, 20]}
+        }
+    }
+    mol = molecule("CH4")
+    render(mol, dryrun=False, save_input_file=False, **config)
+    assert Path("batoms.png").is_file()
+    os.remove("batoms.png")
+
+    # Change save file name
+    fn = "ch4_render.png"
+    fn_blend = ".batoms.blend"
+    render(
+        mol,
+        render_input={"output": fn},
+        dryrun=False,
+        save_input_file=False,
+        save_blender_file=True,
+        **config,
+    )
+    assert Path(fn).is_file()
+    assert Path(fn_blend).is_file()
+    os.remove(fn)
+    os.remove(fn_blend)
