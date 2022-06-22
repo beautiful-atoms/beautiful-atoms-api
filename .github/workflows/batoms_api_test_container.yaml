@@ -44,7 +44,7 @@ jobs:
           flake8 . --exclude=batoms_api/script-api.py,batoms_api/api --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run unit tests
         run:
-          python -m pytest -svv tests/api
+          $BLENDERPY -m pytest -svv tests/api
       # - name: Run test scripts
       #   run: |
       #     cd tests
