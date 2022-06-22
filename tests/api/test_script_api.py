@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch
 import bpy
+from batoms.utils.butils import removeAll
 
 
 @pytest.mark.filterwarnings("error:Input file api")
@@ -51,7 +52,7 @@ def test_apply_batoms_settings():
     from batoms import Batoms
     from ase.build import molecule
 
-    bpy.ops.batoms.delete()
+    removeAll()
 
     batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
 
@@ -98,7 +99,7 @@ def test_apply_batoms_modifications():
     from batoms import Batoms
     from ase.build import molecule
 
-    bpy.ops.batoms.delete()
+    removeAll()
 
     # Line-specific modifications
     batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
