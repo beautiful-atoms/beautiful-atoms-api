@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import patch
+import bpy
 
 
 @pytest.mark.filterwarnings("error:Input file api")
@@ -50,6 +51,8 @@ def test_apply_batoms_settings():
     from batoms import Batoms
     from ase.build import molecule
 
+    bpy.ops.batoms.delete()
+
     batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
 
     # Test 1: test root level configs
@@ -89,3 +92,37 @@ def test_apply_batoms_settings():
         apply_batoms_settings(batoms, settings=config)
 
 
+def test_apply_batoms_modifications():
+    """Test easy modifications"""
+    from batoms_api.script_api import apply_batoms_modifications
+    from batoms import Batoms
+    from ase.build import molecule
+
+    bpy.ops.batoms.delete()
+
+    # Line-specific modifications
+    batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
+    mods = ["batoms.render.resolution = [50, 50]", "batoms.render.engine = 'cycles'"]
+    apply_batoms_modifications(batoms, mods)
+    assert batoms.render.resolution[0] == 50
+    assert batoms.render.resolution[1] == 50
+    assert batoms.render.engine.lower() == "cycles"
+
+    # Test numpy
+    assert batoms.cell[0][0] == 0
+    mods = ["batoms.cell = np.array([[10, 0, 0], [0, 10, 0], [0, 0, 10]])"]
+    apply_batoms_modifications(batoms, mods)
+    assert batoms.cell[0][0] == 10
+
+    # Full name of numpy won't work
+    mods = ["batoms.cell = numpy.array([[15, 0, 0], [0, 15, 0], [0, 0, 15]])"]
+    with pytest.raises(Exception):
+        apply_batoms_modifications(batoms, mods)
+
+    # Quick test of for loop
+    mods = [
+        "for elem, sp in batoms.species.species.items():  sp.color = [0.1, 0.1, 0.1, 0.1]"
+    ]
+    apply_batoms_modifications(batoms, mods)
+    assert batoms.species["C"].color[0] == pytest.approx(0.1, 1.0e-6)
+    assert batoms.species["H"].color[0] == pytest.approx(0.1, 1.0e-6)
