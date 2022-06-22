@@ -44,6 +44,9 @@ jobs:
           flake8 . --exclude=batoms_api/script-api.py,batoms_api/api --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: quick test with batoms installation
         run: |
+          ls -al /home/ || true
+          ls -al /home/blender || true
+          blender -b --python-expr "import batoms"
           blender -b --python-expr "import bpy; bpy.ops.batoms.delete()"
       - name: Run unit tests
         run:
