@@ -56,11 +56,11 @@ def test_apply_batoms_settings():
     batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
 
     # Test 1: test root level configs
-    config = {"label": "ch4_mod", "location": [0, 0, 10], "model_style": 2}
+    config = {"label": "ch4_mod", "location": [0, 0, 10]}
     apply_batoms_settings(batoms, settings=config)
     assert batoms.label != "ch4_mod"
     assert batoms.location[-1] == 10
-    assert all(batoms.model_style == 2)
+    # assert batoms.model_style == 2
 
     # Test 2: test direct property setting
     config = {"render": {"engine": "cycles", "viewport": [1, 1, 0]}}
