@@ -51,15 +51,41 @@ def test_apply_batoms_settings():
     from ase.build import molecule
 
     batoms = Batoms(label="ch4", from_ase=molecule("CH4"))
+
     # Test 1: test root level configs
     config = {"label": "ch4_mod", "location": [0, 0, 10], "model_style": 2}
     apply_batoms_settings(batoms, settings=config)
     assert batoms.label != "ch4_mod"
     assert batoms.location[-1] == 10
     assert all(batoms.model_style == 2)
+
     # Test 2: test direct property setting
     config = {"render": {"engine": "cycles", "viewport": [1, 1, 0]}}
     apply_batoms_settings(batoms, settings=config)
     # cycles changed to capital
     assert batoms.render.engine.lower() == "cycles"
     assert all([i == j for i, j in zip(batoms.render.viewport, [1, 1, 0])])
+    config = {"render": {"engine": "cycles", "viewport": [1, 1, 0]}}
+    apply_batoms_settings(batoms, settings=config)
+    # cycles changed to capital
+    assert batoms.render.engine.lower() == "cycles"
+    assert all([i == j for i, j in zip(batoms.render.viewport, [1, 1, 0])])
+
+    # Test 3: set properties that are indexed by keys
+    config = {"species": {"C": {"color": [1.0, 1.0, 1.0, 1.0]}}}
+    apply_batoms_settings(batoms, settings=config)
+    # cycles changed to capital
+    assert all([c == 1.0 for c in batoms.species["C"].color])
+
+    # Test 4: set properties with tuple keys
+    config = {"bonds": {"setting": {("C", "H"): {"polyhedra": True}}}}
+    apply_batoms_settings(batoms, settings=config)
+    # cycles changed to capital
+    assert batoms.bonds.setting[("C", "H")].polyhedra is True
+
+    # Test 4-1: raw string of tuple keys --> exception
+    config = {"bonds": {"setting": {'("C", "H")': {"polyhedra": False}}}}
+    with pytest.raises(Exception):
+        apply_batoms_settings(batoms, settings=config)
+
+
