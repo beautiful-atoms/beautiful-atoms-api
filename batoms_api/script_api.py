@@ -166,9 +166,9 @@ def run():
     apply_batoms_modifications(batoms, post_modifications)
 
     # Do extras update
-    batoms.species.update()
-    batoms.polyhedras.update()
-    batoms.draw()
+    # batoms.species.update()
+    # batoms.polyhedras.update()
+    # batoms.draw()
 
     batoms.get_image(**render_input)
     if save_bl:
