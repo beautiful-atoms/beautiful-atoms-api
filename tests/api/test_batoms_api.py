@@ -1,4 +1,5 @@
 """Testing the logics of batoms_api.render 
+All individual functions in batoms_api.batoms_api should go to test_settings
 """
 from tempfile import tempdir
 import pytest

@@ -1,3 +1,5 @@
+"""Unit tests for functions in batoms_api.script_api are gathered here
+"""
 import pytest
 from unittest.mock import patch
 import bpy
