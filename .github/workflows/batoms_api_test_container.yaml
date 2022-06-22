@@ -50,9 +50,13 @@ jobs:
           ls -al /home/blender || true
           blender -b --python-exit-code 1 --python-expr "import batoms"
           blender -b --python-exit-code 1 --python-expr "import bpy; bpy.ops.batoms.delete()"
-      - name: Run unit tests
+      - name: Run unit tests for api part
         run:
           $BLENDERPY -m pytest -svv tests/api
+      - name: Run unit tests for sub-modules
+        run:
+          $BLENDERPY -m pytest -svv tests/modules
+      
       # - name: Run test scripts
       #   run: |
       #     cd tests
