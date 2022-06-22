@@ -35,7 +35,6 @@ def type_check(value, allowed_type):
     2. if allowed_type is single instance, try convert
     if all pass, return the value, or raise Exception
     """
-    # warn("Not implemented")
     python_types = []
     if isinstance(allowed_type, str):
         allowed_type = [allowed_type]
@@ -58,7 +57,6 @@ def set_dict(raw_dict, output_dict, schema):
     schema = schema.copy()
     raw_dict = raw_dict.copy()
     for key, value in raw_dict.items():
-        # print(key, value)
         # "_any" in schema key can accept any entry
         # 1. evaluate the key is necessary
         # 2. test if new key is valid in schema
@@ -137,7 +135,6 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
     full_args = (
         list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
     )
-    print(full_args)
     proc = run(full_args)
     if proc.returncode != 0:
         raise RuntimeError(
@@ -160,6 +157,7 @@ def render(
     display=False,
     queue=None,
     save_input_file=False,
+    save_blender_file=False,
 ):
     """
     atoms: an ASE atoms object
@@ -190,6 +188,7 @@ def render(
         "atoms": atoms,
         "volume": volume,
         "api_version": __version__,
+        "save_blender_file": save_blender_file,
         **merged_config,
     }
 
@@ -240,4 +239,4 @@ if __name__ == "__main__":
         },
         "post_modifications": ["batoms.location += [0, 0, 10]"],
     }
-    render(mol, save_input_file="ch4.inp", **test_content)
+    render(mol, save_input_file="ch4.inp", save_blender_file=True, **test_content)

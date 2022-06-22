@@ -19,6 +19,7 @@ file_handler = logging.FileHandler(filepath, mode="w")
 file_handler.setFormatter(logging.Formatter(formatter))
 logger.addHandler(file_handler)
 logger.info("Python version: {} ".format(sys.version))
+logging.captureWarnings(True)
 
 # def render(atoms, inputs = {}, display = False, queue = None, ):
 #     with open('.batoms.inp', 'wb') as f:

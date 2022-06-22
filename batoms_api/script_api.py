@@ -44,6 +44,7 @@ def _handle_argv_extras():
     If no extra options provided, return None
     """
     argv = copy(sys.argv)
+    logger.debug(f"Full args when running script_api: {argv}")
     if "--" not in argv:
         return None
     else:
@@ -67,6 +68,7 @@ def _get_input_file():
         input_file = Path(os.environ["BATOMS_INPUT_FILE"])
     else:
         raise ValueError("Cannot find input file!")
+    logger.debug(f"Read from input file {input_file.as_posix()}")
     return input_file
 
 
@@ -109,6 +111,7 @@ def apply_batoms_settings(batoms, settings={}, schema=default_schema["settings"]
             elif "_type" in sub_schema.keys():
                 # Reached a leaf node
                 setattr(obj, key, val)
+                logger.debug(f"Setting property '{key}' of {type(obj)} to {val}")
             else:
                 # Walk down the object tree
                 sub_setting = val.copy()
@@ -124,14 +127,15 @@ def apply_batoms_modifications(batoms, post_modifications=[]):
     for mod in post_modifications:
         # TODO: sanity check of expression?
         exec(mod, blender_globals, {"batoms": batoms, "np": np})
+        logger.debug(f"Applied modification '{mod}' to {batoms}")
 
 
 def save_blender_file(input_file):
     """Save the main .blend file under the same directory"""
     input_file = Path(input_file)
-    bpy.ops.wm.save_as_mainfile(
-        filepath=input_file.with_suffix(".blend").resolve().as_posix()
-    )
+    blend_file = input_file.with_suffix(".blend").resolve().as_posix()
+    bpy.ops.wm.save_as_mainfile(filepath=blend_file)
+    logger.debug(f"Save blender file to {blend_file}")
     return
 
 

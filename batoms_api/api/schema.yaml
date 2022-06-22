@@ -77,3 +77,5 @@ settings:
   cavity: {}
 
 post_modifications: { _type: _list }
+api_version: {_type: _str}
+save_blender_file: {_type: _bool}
