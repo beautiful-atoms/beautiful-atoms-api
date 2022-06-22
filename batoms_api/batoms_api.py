@@ -109,7 +109,7 @@ def merge_dicts(origin_dict, update_dict, schema=default_schema):
     return merged
 
 
-def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("-b",)):
+def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("-b",), dryrun=False):
     """Run the blender file using given input file
     Basic usage
     blender -b batoms_api.script_api -- input_file_path
@@ -135,15 +135,21 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
     full_args = (
         list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
     )
-    proc = run(full_args)
-    if proc.returncode != 0:
-        raise RuntimeError(
-            (
-                "Running following rendering script\n"
-                f"{full_args}\n"
-                f"fails with return code {proc.returncode}."
+    if dryrun:
+        logger.debug(("Dryrun mode. Following command will be used for blender rendering:\n"
+        f"{full_args}"
+        ))
+    else:
+        proc = run(full_args)
+        if proc.returncode != 0:
+            raise RuntimeError(
+                (
+                    "Running following rendering script\n"
+                    f"{full_args}\n"
+                    f"fails with return code {proc.returncode}."
+                )
             )
-        )
+    return
 
 
 def render(
@@ -158,6 +164,7 @@ def render(
     queue=None,
     save_input_file=False,
     save_blender_file=False,
+    dryrun=False
 ):
     """
     atoms: an ASE atoms object
@@ -169,6 +176,7 @@ def render(
     config_file: default configuration yaml file to load from.
                  parameters `batoms_input` `render_input` `settings` and `post_modifications` overwrite default config
     save_input_file: if True, saves to `.batoms.inp` on cwd; otherwise if given a specifc name, save to that name
+    dryrun: do not actually execute the blender_run function. input file is still generated
     """
     if config_file is not None:
         default_config = load_yaml_config(config_file)
@@ -198,6 +206,7 @@ def render(
 
     with open(input_file, "wb") as f:
         pickle.dump(config, f, protocol=0)
+    logger.debug(f"Write input file {input_file.as_posix()}")
 
     options = {}
     if display:
@@ -205,10 +214,11 @@ def render(
     if queue:
         options["args_prefix"] = ["srun", "-n", "$SLURM_NTASKS"]
 
-    blender_run(input_file, **options)
+    blender_run(input_file, dryrun=dryrun, **options)
 
     if not save_input_file:
         os.remove(input_file)
+        logger.debug(f"Removed input file {input_file.as_posix()}")
 
     return
 
