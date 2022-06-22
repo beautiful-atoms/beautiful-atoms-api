@@ -26,6 +26,10 @@ setup(
     ],
     packages=find_packages(),
     entry_points={"console_scripts": ["batoms=batoms_api.cli.main:main"]},
-    install_requires=["ruamel.yaml", "mergedeep==1.3.4"],
+    install_requires=["ase", "ruamel.yaml", "mergedeep==1.3.4"],
+    package_data={"": ["api/*.yaml", "api/*.yml"]},
+    # include_package_data=True,
+    # package_data={"batoms_api.api": ["*.yaml", "*.yml"]},
     python_requires=">=3.7",
+
 )
