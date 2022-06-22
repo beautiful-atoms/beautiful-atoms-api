@@ -109,7 +109,9 @@ def merge_dicts(origin_dict, update_dict, schema=default_schema):
     return merged
 
 
-def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("-b",), dryrun=False):
+def blender_run(
+    input_file, blender_command=None, args_prefix=(), args_extras=("-b",), dryrun=False
+):
     """Run the blender file using given input file
     Basic usage
     blender -b batoms_api.script_api -- input_file_path
@@ -136,9 +138,12 @@ def blender_run(input_file, blender_command=None, args_prefix=(), args_extras=("
         list(args_prefix) + bl_main_command + list(args_extras) + bl_sub_commands
     )
     if dryrun:
-        logger.debug(("Dryrun mode. Following command will be used for blender rendering:\n"
-        f"{full_args}"
-        ))
+        logger.debug(
+            (
+                "Dryrun mode. Following command will be used for blender rendering:\n"
+                f"{full_args}"
+            )
+        )
     else:
         proc = run(full_args)
         if proc.returncode != 0:
@@ -164,7 +169,7 @@ def render(
     queue=None,
     save_input_file=False,
     save_blender_file=False,
-    dryrun=False
+    dryrun=False,
 ):
     """
     atoms: an ASE atoms object

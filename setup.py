@@ -31,5 +31,4 @@ setup(
     # include_package_data=True,
     # package_data={"batoms_api.api": ["*.yaml", "*.yml"]},
     python_requires=">=3.7",
-
 )
