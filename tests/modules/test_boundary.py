@@ -1,5 +1,10 @@
 import pytest
-from _common_helpers import data_path, base_config, load_blender_file, get_material_color
+from _common_helpers import (
+    data_path,
+    base_config,
+    load_blender_file,
+    get_material_color,
+)
 import os
 import numpy as np
 

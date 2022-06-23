@@ -14,12 +14,17 @@ base_config = {
     },
 }
 
+
 def get_material_color(batoms_property):
-    """Get the active material color of current batoms_property
-    """
+    """Get the active material color of current batoms_property"""
     active_mater = getattr(batoms_property, "active_material")
-    c = active_mater.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value
+    c = (
+        active_mater.node_tree.nodes["Principled BSDF"]
+        .inputs["Base Color"]
+        .default_value
+    )
     return np.array(c)
+
 
 @contextmanager
 def load_blender_file(filepath=".batoms.blend", label="test_batoms"):
