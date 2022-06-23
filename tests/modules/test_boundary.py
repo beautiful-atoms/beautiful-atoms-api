@@ -1,7 +1,7 @@
-from batoms_api.script_api import save_blender_file
 import pytest
-from _common_helpers import data_path, base_config, load_blender_file
+from _common_helpers import data_path, base_config, load_blender_file, get_material_color
 import os
+import numpy as np
 
 
 def test_boundary():
@@ -32,6 +32,8 @@ def test_boundary():
         # Conventional cell, 2 x Ti + 4 x O
         assert len(batoms.arrays["species"]) == 6
         assert len(batoms.bonds) == 54
+        c_polyhedra = get_material_color(batoms.polyhedras.obj)
+        assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
     os.remove(".batoms.blend")
 
     # 2. Shrink the boundary below 1
@@ -44,6 +46,8 @@ def test_boundary():
         assert len(batoms.arrays["species"]) == 6
         # 2 polyhedrae x 6 bonds each
         assert len(batoms.bonds) == 12
+        c_polyhedra = get_material_color(batoms.polyhedras.obj)
+        assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
     os.remove(".batoms.blend")
 
 

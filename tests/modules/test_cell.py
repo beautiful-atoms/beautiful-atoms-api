@@ -1,30 +1,32 @@
+import pytest
+from _common_helpers import data_path, base_config, load_blender_file, get_material_color
+import os
+import numpy as np
+
 def test_cell():
     from ase.io import read
     from batoms_api import render
 
-    atoms = read("../tests/datas/tio2.cif")
-    batoms_input = {
-        "label": "tio2",
-        "model_style": "2",
-    }
-    cell_input = {}
-    bonds_input = {
-        "show_search": True,
-    }
-    polyhedras_input = {"setting": {"Ti": {"color": [0, 0.5, 0.5, 0.5]}}}
-    render_input = {
-        "viewport": [1, 0, 0],
-        "engine": "eevee",
-        "output": "figs/cell_tio2.png",
-    }
-    inputs = {
-        "batoms": batoms_input,
-        "cell": cell_input,
-        "bonds": bonds_input,
-        "polyhedras": polyhedras_input,
-        "render": render_input,
-    }
-    render(atoms, inputs=inputs, display=False)
+    atoms = read(data_path / "tio2.cif")
+    config = base_config.copy()
+
+    config["settings"].update({
+        "model_style": 2,
+        "bonds": {"show_search": True,},
+        "polyhedras": {
+            "setting": {
+                "Ti": {"color": [0, 0.5, 0.5, 0.5]}
+            }
+        }
+
+    })
+    render(atoms, save_blender_file=True, **config)
+    with load_blender_file() as do:
+        batoms = do["batoms"]
+        assert batoms.model_style == 2
+        c_polyhedra = get_material_color(batoms.polyhedras.obj)
+        assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
+    os.remove(".batoms.blend")
 
 
 if __name__ == "__main__":

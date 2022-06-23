@@ -8,6 +8,7 @@ batoms_input:
   radius_style: { _type: [_int, _str] }
   color_style: { _type: [_int, _str] }
   movie: { _type: _bool }
+  show_unit_cell: { _type: _bool }
 
 render_input:
   viewport: { _type: _list }
@@ -31,6 +32,9 @@ settings:
   size: { _type: _list, _edit_member: false }
   scale: { _type: _list, _edit_member: false }
   location: { _type: _list, _edit_member: false }
+  show_unit_cell: { _type: _bool }
+  
+
 
   render:
     viewport: { _type: _list }
