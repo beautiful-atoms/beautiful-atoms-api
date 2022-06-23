@@ -6,6 +6,7 @@ batoms_input:
   model_style: { _type: [_int, _str] }
   polyhedra_style: { _disabled: true }
   radius_style: { _type: [_int, _str] }
+  color_style: { _type: [_int, _str] }
   movie: { _type: _bool }
 
 render_input:

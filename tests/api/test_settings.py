@@ -85,7 +85,7 @@ def test_disabled_vals():
         default_schema,
     )
     assert "polyhedra_style" not in output["batoms_input"].keys()
-    assert "model_style" not in output["batoms_input"].keys()
+    assert "model_style" in output["batoms_input"].keys()
     assert "radius_style" in output["batoms_input"].keys()
 
     # Special case: batoms label should be an initializer instead of modifier
@@ -109,7 +109,7 @@ def test_yaml_load():
     yaml_file = open((curdir / "example.yaml"), "r")
     config = load_yaml_config(yaml_file)
     assert "polyhedra_style" not in config["batoms_input"].keys()
-    assert "model_style" not in config["batoms_input"].keys()
+    assert "model_style" in config["batoms_input"].keys()
     assert config["batoms_input"]["radius_style"] == 1
     assert ("C", "H") in config["settings"]["bonds"]["setting"].keys()
 

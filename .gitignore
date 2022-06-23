@@ -154,3 +154,4 @@ upstream_tests/
 archive/
 *.blend1
 *.inp
+*.blend
