@@ -168,7 +168,7 @@ def run():
     # Do extras update
     # batoms.species.update()
     # batoms.polyhedras.update()
-    # batoms.draw()
+    batoms.draw()
 
     batoms.get_image(**render_input)
     if save_bl:
