@@ -88,7 +88,7 @@ def _check_version(input_api_version):
 def apply_batoms_settings(batoms, settings={}, schema=default_schema["settings"]):
     """Apply settings to batoms instances"""
 
-    def modify(obj, setting, schema):
+    def modify(obj, setting, schema, draw_list):
         """Follow the same algorithm as batoms_api.set_dict"""
         for key, val in setting.items():
             # breakpoint()
@@ -114,16 +114,25 @@ def apply_batoms_settings(batoms, settings={}, schema=default_schema["settings"]
                 warn(f"Key {key} is disabled in current scope, ignore.")
             elif "_type" in sub_schema.keys():
                 # Reached a leaf node
-                setattr(obj, key, val)
-                logger.debug(f"Setting property '{key}' of {type(obj)} to {val}")
+                if key not in ["draw"]:
+                    setattr(obj, key, val)
+                    logger.debug(f"Setting property '{key}' of {type(obj)} to {val}")
+                # Monkey patch add flag for drawing
+                elif key == "draw":
+                    setattr(obj, "_draw", val)
+                    logger.debug(f"Add flag '_draw' of {type(obj)} and set to {val}")
+                    draw_list.append(obj)
+                    logger.debug(f"Add {type(obj)} to drawing candidates")
+                else:
+                    raise NotImplementedError
             else:
                 # Walk down the object tree
                 sub_setting = val.copy()
-                modify(sub_obj, sub_setting, sub_schema.copy())
+                modify(sub_obj, sub_setting, sub_schema.copy(), draw_list)
         return
-
-    modify(batoms, settings, schema)
-    return
+    draw_list = []
+    modify(batoms, settings, schema, draw_list)
+    return draw_list
 
 
 def apply_batoms_modifications(batoms, post_modifications=[]):
@@ -166,12 +175,14 @@ def run():
 
     batoms = Batoms(from_ase=atoms, volume=volume, **batoms_input)
 
-    apply_batoms_settings(batoms, settings)
+    draw_list = apply_batoms_settings(batoms, settings)
+    for obj in draw_list:
+        if hasattr(obj, "_draw") and hasattr(obj, "draw"):
+            if obj._draw is True:
+                obj.draw()
     apply_batoms_modifications(batoms, post_modifications)
 
-    # Do extras update
-    # batoms.species.update()
-    # batoms.polyhedras.update()
+    
     batoms.draw()
 
     batoms.get_image(**render_input)

@@ -81,6 +81,7 @@ settings:
       _any:
         level: { _type: _float }
         color: { _type: _list }
+    draw: { _type: _bool }
   lattice_plane: {}
   crystal_shape: {}
   ms: {}

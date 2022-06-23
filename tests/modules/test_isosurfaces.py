@@ -24,11 +24,12 @@ def test_isosurfaces():
                 "setting": {
                     "1": {"level": -0.001, "color": [1, 1, 0, 0.5]},
                     "2": {"level": 0.001, "color": [0, 1, 1, 0.5]},
-                }
+                },
+                "draw": True
             },
         }
     )
-    config["post_modifications"] = ["batoms.isosurfaces.draw()"]
+    # config["post_modifications"] = ["batoms.isosurfaces.draw()"]
     render(atoms, volume=volume, save_blender_file=True, **config)
     with load_blender_file() as do:
         batoms = do["batoms"]
@@ -53,7 +54,7 @@ def test_isosurfaces_multi():
     config["settings"].update(
         {
             "model_style": 1,
-            "isosurfaces": {"setting": {}},
+            "isosurfaces": {"setting": {}, "draw": True},
         }
     )
     levels = [-0.001, -0.005, -0.01, -0.02, -0.05]
@@ -62,7 +63,7 @@ def test_isosurfaces_multi():
     for i in range(5, 10):
         config["settings"]["isosurfaces"]["setting"][str(i)] = {"level": -levels[i - 5], "color": [0, 1, 1, 0.2]}
 
-    config["post_modifications"] = ["batoms.isosurfaces.draw()"]
+    # config["post_modifications"] = ["batoms.isosurfaces.draw()"]
     render(atoms, volume=volume, save_blender_file=True, **config)
     with load_blender_file() as do:
         batoms = do["batoms"]
