@@ -146,7 +146,7 @@ def run():
     each post-modification line is directly evaluated in sequence.
     """
     input_file = _get_input_file()
-
+    bpy.ops.batoms.delete()
     with open(input_file, "rb") as f:
         config = pickle.load(f)
     atoms = config["atoms"]

@@ -1,11 +1,13 @@
 import pytest
 from _common_helpers import data_path, base_config, load_blender_file
 import os
+import bpy
 
 
 def test_batoms():
     from ase.build import molecule
     from batoms_api import render
+    bpy.ops.batoms.delete()
 
     atoms = molecule("CH4")
     config = base_config.copy()
@@ -30,6 +32,7 @@ def test_batoms():
     with pytest.raises(Exception):
         print(batoms.label)
     os.remove(".batoms.blend")
+    bpy.ops.batoms.delete()
 
 
 if __name__ == "__main__":

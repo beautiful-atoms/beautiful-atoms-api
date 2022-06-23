@@ -1,9 +1,11 @@
 import pytest
 from _common_helpers import data_path, base_config, load_blender_file
 import os
+import bpy
 
 
 def test_bonds():
+    bpy.ops.batoms.delete()
     from ase.build import molecule
     from batoms_api import render
 
@@ -18,9 +20,11 @@ def test_bonds():
         assert batoms.model_style == 1
         assert batoms.bonds.setting[("C", "H")].style == "3"
     os.remove(".batoms.blend")
+    bpy.ops.batoms.delete()
 
 
 def test_hydrogen_bond():
+    bpy.ops.batoms.delete()
     from ase.build import molecule
     from batoms_api import render
 
@@ -42,6 +46,8 @@ def test_hydrogen_bond():
         assert all(batoms.bonds.arrays["style"][5:] == 2)
     os.remove(".batoms.blend")
 
+    bpy.ops.batoms.delete()
+
     # 2. Disable hydrogen bond, # of total bonds --> 5
     config["settings"]["bonds"].update({"show_hydrogen_bond": False})
     render(atoms, save_blender_file=True, **config)
@@ -53,6 +59,8 @@ def test_hydrogen_bond():
         assert len(batoms.bonds.arrays["style"]) == 5
         assert all(batoms.bonds.arrays["style"] == 1)
     os.remove(".batoms.blend")
+
+    bpy.ops.batoms.delete()
 
 
 if __name__ == "__main__":

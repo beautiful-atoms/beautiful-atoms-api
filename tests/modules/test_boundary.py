@@ -7,9 +7,11 @@ from _common_helpers import (
 )
 import os
 import numpy as np
+import bpy
 
 
 def test_boundary():
+    bpy.ops.batoms.delete()
     from ase.io import read
     from batoms_api import render
 
@@ -41,6 +43,8 @@ def test_boundary():
         assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
     os.remove(".batoms.blend")
 
+    bpy.ops.batoms.delete()
+
     # 2. Shrink the boundary below 1
     config["settings"]["boundary"] = [-0.2, -0.2, -0.2]
     render(atoms, save_blender_file=True, **config)
@@ -54,6 +58,8 @@ def test_boundary():
         c_polyhedra = get_material_color(batoms.polyhedras.obj)
         assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
     os.remove(".batoms.blend")
+
+    bpy.ops.batoms.delete()
 
 
 if __name__ == "__main__":

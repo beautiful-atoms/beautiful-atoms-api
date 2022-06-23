@@ -54,8 +54,9 @@ jobs:
         run:
           $BLENDERPY -m pytest -svv tests/api
       - name: Run unit tests for sub-modules
-        run:
-          $BLENDERPY -m pytest -svv tests/modules
+        # There is some issue with running all test scripts in a single pytest environment. Let's do them separately
+        run: |
+          for f in tests/modules/test_*.py; do $BLENDERPY -m pytest -svv $f; done
       
       # - name: Run test scripts
       #   run: |

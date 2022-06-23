@@ -7,9 +7,11 @@ from _common_helpers import (
 )
 import os
 import numpy as np
+import bpy
 
 
 def test_cell():
+    bpy.ops.batoms.delete()
     from ase.io import read
     from batoms_api import render
 
@@ -37,6 +39,8 @@ def test_cell():
             cc = batoms.cell.obj_cylinder
     os.remove(".batoms.blend")
 
+    bpy.ops.batoms.delete()
+
     # Test 2: add cell drawing (currently manual)
     # TODO: test show_unit_cell
     config["post_modifications"] = ["batoms.cell.draw()"]
@@ -50,6 +54,8 @@ def test_cell():
         c_cell = get_material_color(cc)
         assert np.isclose(c_cell, [0, 0, 0, 1.0]).all()
     os.remove(".batoms.blend")
+
+    bpy.ops.batoms.delete()
 
 
 if __name__ == "__main__":
