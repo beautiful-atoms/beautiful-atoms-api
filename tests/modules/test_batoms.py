@@ -7,6 +7,7 @@ import bpy
 def test_batoms():
     from ase.build import molecule
     from batoms_api import render
+
     bpy.ops.batoms.delete()
 
     atoms = molecule("CH4")

@@ -4,6 +4,7 @@ import os
 import numpy as np
 from pathlib import Path
 from contextlib import contextmanager
+from bpy.types import Object, Mesh
 
 
 data_path = Path(__file__).parents[1].resolve() / "datas"
@@ -15,15 +16,28 @@ base_config = {
 }
 
 
-def get_material_color(batoms_property):
+def get_material_color(obj):
     """Get the active material color of current batoms_property"""
-    active_mater = getattr(batoms_property, "active_material")
+    if not isinstance(obj, Object):
+        raise TypeError("Must provide a blender Object as input!")
+    active_mater = getattr(obj, "active_material")
     c = (
         active_mater.node_tree.nodes["Principled BSDF"]
         .inputs["Base Color"]
         .default_value
     )
     return np.array(c)
+
+
+def get_gn_attributes(obj, attribute):
+    if not isinstance(obj, Object):
+        raise TypeError("Must provide a blender Object as input!")
+    mesh = obj.data
+    att = mesh.attributes.get(str(attribute))
+    if att:
+        return list(att.data)
+    else:
+        raise AttributeError(f"{obj.name} does not have attribute {attribute}")
 
 
 @contextmanager
