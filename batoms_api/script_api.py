@@ -99,6 +99,10 @@ def apply_batoms_settings(batoms, settings={}, schema=default_schema["settings"]
                 else:
                     # This subschema accepts any key value
                     sub_schema = schema["_any"]
+                    # obj will have method `find`
+                    # if the object does not exist, create a new one
+                    if obj.find(key) is None:
+                        obj.add(key)
                     sub_obj = obj[key]
             else:
                 sub_schema = schema[key]

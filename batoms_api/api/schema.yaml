@@ -76,7 +76,11 @@ settings:
         width: { _type: _float }
         material_style: { _type: _str, _disabled: true }
 
-  isosurfaces: {}
+  isosurfaces: 
+    setting:
+      _any:
+        level: { _type: _float }
+        color: { _type: _list }
   lattice_plane: {}
   crystal_shape: {}
   ms: {}
