@@ -50,6 +50,9 @@ settings:
       color: { _type: _list, _edit_member: false }
       material_style: { _type: _str }
       scale: { _type: _float }
+      occupancies: { _disabled: true, _type: _dict }
+      radius: { _type: _float }
+      segments: { _disabled: true }
     update: { _type: _bool }
 
   bonds:
@@ -58,18 +61,20 @@ settings:
     setting:
       _any:
         _eval_key: true
-        min: { _type: _float }
         max: { _type: _float }
-        search: { _type: _int }
+        min: { _type: _float }
         order: { _type: _int }
-        style: { _type: [_int, _str] }
         polyhedra: { _type: _bool }
+        search: { _type: _int }
+        style: { _type: [_int, _str] }
+        width: { _type: _float }
 
   ribbon: {}
   polyhedras:
     setting:
       _any:
         show_edge: { _type: _bool }
+        flag: { _type: _bool }
         color: { _type: _list }
         width: { _type: _float }
         material_style: { _type: _str, _disabled: true }
@@ -79,25 +84,35 @@ settings:
       _any:
         level: { _type: _float }
         color: { _type: _list }
-        resolution: { _type: _float }
-        probe: { _type: _float }
-        select: { _type: [_str, _list] }
     draw: { _type: _bool }
   lattice_plane:
     setting:
       _any:
         _eval_key: true
-        distance: { _type: _float }
-        scale: { _type: _float }
-        color: { _type: _list }
         boundary: { _type: _bool }
+        color: { _type: _list }
+        distance: { _type: _float }
+        material_style: { _type: _str }
+        scale: { _type: _float }
+        show_edge: { _type: _bool }
         slicing: { _type: _bool }
         width: { _type: _float }
-        material_style: { _type: _str }
-        show_edge: { _type: _bool } 
     draw: { _type: _bool }
-  
-  crystal_shape: {}
+
+  crystal_shape:
+    setting:
+      _any:
+        _eval_key: true
+        crystal: { _type: _bool }
+        color: { _type: _list }
+        boundary: { _type: _bool }
+        distance: { _type: _float }
+        material_style: { _type: _str }
+        show_edge: { _type: _bool }
+        slicing: { _type: _bool }
+        symmetry: { _type: _bool }
+        width: { _type: _float }
+    draw: { _type: _bool }
 
   ms:
     setting:
@@ -109,7 +124,17 @@ settings:
     draw: { _type: _bool }
 
   magres: {}
-  cavity: {}
+  cavity:
+    resolution: { _type: _float }
+    minRadius: { _type: _float }
+    setting:
+      _any:
+        color: { _type: _list }
+        flag: { _type: _bool }
+        material_style: { _type: _str }
+        max: { _type: _float }
+        min: { _type: _float }
+    draw: { _type: _bool }
 
 post_modifications: { _type: _list }
 api_version: { _type: _str }
