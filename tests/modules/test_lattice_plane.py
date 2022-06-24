@@ -60,6 +60,7 @@ def test_lp_material():
 
     config = base_config.copy()
     atoms = bulk("Au", cubic=True) * [2, 2, 2]
+    # Test if all setters work (leaving actual unit tests for boundary and slicing)
     config["settings"].update(
         {
             "model_style": 0,
@@ -69,6 +70,11 @@ def test_lp_material():
                         "distance": 1,
                         "color": [0.8, 0, 0.6, 0.95],
                         "material_style": "metallic",
+                        "width": 0.2,
+                        "show_edge": False,
+                        "scale": 1.2,
+                        "boundary": False,
+                        "slicing": False,
                     },
                 },
                 "draw": True,
