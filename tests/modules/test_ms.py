@@ -26,7 +26,6 @@ def test_ms():
                 },
                 "draw": True,
             },
-            "render": {"engine": "workbench"},
         }
     )
     render(atoms, save_blender_file=True, display=False, **config)
