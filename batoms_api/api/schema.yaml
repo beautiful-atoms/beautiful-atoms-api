@@ -83,8 +83,22 @@ settings:
         probe: { _type: _float }
         select: { _type: [_str, _list] }
     draw: { _type: _bool }
-  lattice_plane: {}
+  lattice_plane:
+    setting:
+      _any:
+        _eval_key: true
+        distance: { _type: _float }
+        scale: { _type: _float }
+        color: { _type: _list }
+        boundary: { _type: _bool }
+        slicing: { _type: _bool }
+        width: { _type: _float }
+        material_style: { _type: _str }
+        show_edge: { _type: _bool } 
+    draw: { _type: _bool }
+  
   crystal_shape: {}
+
   ms:
     setting:
       _any:
