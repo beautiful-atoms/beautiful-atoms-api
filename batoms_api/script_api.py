@@ -130,6 +130,7 @@ def apply_batoms_settings(batoms, settings={}, schema=default_schema["settings"]
                 sub_setting = val.copy()
                 modify(sub_obj, sub_setting, sub_schema.copy(), draw_list)
         return
+
     draw_list = []
     modify(batoms, settings, schema, draw_list)
     return draw_list
@@ -182,7 +183,6 @@ def run():
                 obj.draw()
     apply_batoms_modifications(batoms, post_modifications)
 
-    
     batoms.draw()
 
     batoms.get_image(**render_input)

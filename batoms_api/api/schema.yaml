@@ -22,19 +22,17 @@ render_input:
 settings:
   label: { _disabled: true }
   cell: { _type: _list }
-  boundary: { _type: [ _list, _float ] }
+  boundary: { _type: [_list, _float] }
   pbc: { _type: _list, _edit_member: false }
   model_style: { _type: _int }
   polyhedra_style: { _type: _int }
-  radius_style: { _type: [_str, _int ] }
-  color_style: { _type: [ _str, _int ] }
+  radius_style: { _type: [_str, _int] }
+  color_style: { _type: [_str, _int] }
   wrap: { _type: _list, _edit_member: false }
   size: { _type: _list, _edit_member: false }
   scale: { _type: _list, _edit_member: false }
   location: { _type: _list, _edit_member: false }
   show_unit_cell: { _type: _bool }
-  
-
 
   render:
     viewport: { _type: _list }
@@ -76,15 +74,26 @@ settings:
         width: { _type: _float }
         material_style: { _type: _str, _disabled: true }
 
-  isosurfaces: 
+  isosurfaces:
     setting:
       _any:
         level: { _type: _float }
         color: { _type: _list }
+        resolution: { _type: _float }
+        probe: { _type: _float }
+        select: { _type: [_str, _list] }
     draw: { _type: _bool }
   lattice_plane: {}
   crystal_shape: {}
-  ms: {}
+  ms:
+    setting:
+      _any:
+        type: { _type: _str }
+        color: { _type: _list }
+        probe: { _type: _float }
+        resolution: { _type: _float }
+    draw: { _type: _bool }
+
   magres: {}
   cavity: {}
 
