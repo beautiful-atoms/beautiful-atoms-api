@@ -21,37 +21,37 @@ render_input:
 
 settings:
   label: { _disabled: true }
-  cell: { _type: _list }
   boundary: { _type: [_list, _float] }
-  pbc: { _type: _list, _edit_member: false }
+  cell: { _type: _list }
+  color_style: { _type: [_str, _int] }
+  location: { _type: _list, _edit_member: false }
   model_style: { _type: _int }
+  pbc: { _type: _list, _edit_member: false }
   polyhedra_style: { _type: _int }
   radius_style: { _type: [_str, _int] }
-  color_style: { _type: [_str, _int] }
-  wrap: { _type: _list, _edit_member: false }
-  size: { _type: _list, _edit_member: false }
   scale: { _type: _list, _edit_member: false }
-  location: { _type: _list, _edit_member: false }
+  size: { _type: _list, _edit_member: false }
   show_unit_cell: { _type: _bool }
+  wrap: { _type: _list, _edit_member: false }
 
   render:
-    viewport: { _type: _list }
     engine: { _type: _str }
-    output: { _type: _str }
     animation: { _type: _bool }
     gpu: { _type: _bool }
-    run_render: { _type: _bool }
+    output: { _type: _str }
     resolution: { _type: _list }
-    studiolight: { _type: _str }
+    run_render: { _type: _bool }
     samples: { _type: _int }
+    studiolight: { _type: _str }
+    viewport: { _type: _list }
 
   species:
     _any:
       color: { _type: _list, _edit_member: false }
       material_style: { _type: _str }
-      scale: { _type: _float }
       occupancies: { _disabled: true, _type: _dict }
       radius: { _type: _float }
+      scale: { _type: _float }
       segments: { _disabled: true }
     update: { _type: _bool }
 
@@ -69,7 +69,6 @@ settings:
         style: { _type: [_int, _str] }
         width: { _type: _float }
 
-  ribbon: {}
   polyhedras:
     setting:
       _any:
@@ -123,7 +122,6 @@ settings:
         resolution: { _type: _float }
     draw: { _type: _bool }
 
-  magres: {}
   cavity:
     resolution: { _type: _float }
     minRadius: { _type: _float }
@@ -135,6 +133,9 @@ settings:
         max: { _type: _float }
         min: { _type: _float }
     draw: { _type: _bool }
+
+  magres: {}
+  ribbon: {}
 
 post_modifications: { _type: _list }
 api_version: { _type: _str }
