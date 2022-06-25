@@ -129,3 +129,29 @@ dmypy.json
 .pyre/
 
 .batoms.inp
+.DS_Store
+
+# batoms 
+*.batoms.inp
+# Images
+*.png
+# atomic structures
+*.in
+*.xyz
+*.pdb
+*.cif
+*.poscar
+*.x3d
+*.obj
+*.mtl
+*.fbx
+
+#test/
+.vscode/*
+*/.vscode/*
+
+upstream_tests/
+archive/
+*.blend1
+*.inp
+*.blend
