@@ -11,8 +11,8 @@ settings:
       material_style: "metallic"
     H:
       material_style: "plastic"
-  bonds:
-    setting:
+  bond:
+    settings:
       ("C", "H"):
         order: 2
         polyhedra: true

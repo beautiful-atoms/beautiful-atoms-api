@@ -35,37 +35,37 @@ def test_dict_set():
     set_dict(
         {
             "settings": {
-                "bonds": {"setting": {"('C', 'H')": {"order": 2}}},
+                "bond": {"settings": {"('C', 'H')": {"order": 2}}},
             }
         },
         output,
         default_schema,
     )
-    assert ("C", "H") in output["settings"]["bonds"]["setting"].keys()
+    assert ("C", "H") in output["settings"]["bond"]["settings"].keys()
     # Test if explicity python types can be added
     output = {}
     set_dict(
         {
             "settings": {
-                "bonds": {"setting": {("C", "H"): {"order": 2}}},
+                "bond": {"settings": {("C", "H"): {"order": 2}}},
             }
         },
         output,
         default_schema,
     )
-    assert ("C", "H") in output["settings"]["bonds"]["setting"].keys()
-    # Test wrong property name (should be `bonds`)
+    assert ("C", "H") in output["settings"]["bond"]["settings"].keys()
+    # property 'bonds' is deprecated and not in settings
     output = {}
     set_dict(
         {
             "settings": {
-                "bond": {"setting": {'("C", "H")': {"order": 2}}},
+                "bonds": {"settings": {'("C", "H")': {"order": 2}}},
             }
         },
         output,
         default_schema,
     )
-    assert "bond" not in output["settings"].keys()
+    assert "bonds" not in output["settings"].keys()
 
 
 def test_disabled_vals():
@@ -111,7 +111,7 @@ def test_yaml_load():
     assert "polyhedra_style" not in config["batoms_input"].keys()
     assert "model_style" in config["batoms_input"].keys()
     assert config["batoms_input"]["radius_style"] == 1
-    assert ("C", "H") in config["settings"]["bonds"]["setting"].keys()
+    assert ("C", "H") in config["settings"]["bond"]["settings"].keys()
 
 
 def test_merge_dict():
@@ -122,8 +122,8 @@ def test_merge_dict():
     new_config = {
         "batoms_input": {"label": "ch4_mod"},
         "settings": {
-            "bonds": {
-                "setting": {
+            "bond": {
+                "settings": {
                     ("C", "H"): {
                         "order": 1,
                     },
@@ -137,8 +137,8 @@ def test_merge_dict():
     }
     merged = merge_dicts(config, new_config)
     assert merged["batoms_input"]["label"] == "ch4_mod"
-    assert ("C", "C") in merged["settings"]["bonds"]["setting"].keys()
-    assert merged["settings"]["bonds"]["setting"][("C", "H")]["order"] == 1
-    assert merged["settings"]["bonds"]["setting"][("C", "C")]["order"] == 2
-    assert merged["settings"]["bonds"]["setting"][("C", "H")]["polyhedra"] is True
-    assert merged["settings"]["bonds"]["setting"][("C", "C")]["polyhedra"] is False
+    assert ("C", "C") in merged["settings"]["bond"]["settings"].keys()
+    assert merged["settings"]["bond"]["settings"][("C", "H")]["order"] == 1
+    assert merged["settings"]["bond"]["settings"][("C", "C")]["order"] == 2
+    assert merged["settings"]["bond"]["settings"][("C", "H")]["polyhedra"] is True
+    assert merged["settings"]["bond"]["settings"][("C", "C")]["polyhedra"] is False

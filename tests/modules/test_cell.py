@@ -23,10 +23,10 @@ def test_cell():
     config["settings"].update(
         {
             "model_style": 2,
-            "bonds": {
+            "bond": {
                 "show_search": True,
             },
-            "polyhedras": {"setting": {"Ti": {"color": [0, 0.5, 0.5, 0.5]}}},
+            "polyhedra": {"settings": {"Ti": {"color": [0, 0.5, 0.5, 0.5]}}},
         }
     )
     render(atoms, save_blender_file=True, **config)
@@ -50,9 +50,10 @@ def test_cell():
         assert batoms.model_style == 2
         c_polyhedra = get_material_color(batoms.polyhedras.obj)
         assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
-        cc = batoms.cell.obj_cylinder
-        c_cell = get_material_color(cc)
-        assert np.isclose(c_cell, [0, 0, 0, 1.0]).all()
+        # The new Bcells from v2.2.0 up has cancelled usage of obj_cylinder
+        # cc = batoms.cell.obj_cylinder
+        # c_cell = get_material_color(cc)
+        # assert np.isclose(c_cell, [0, 0, 0, 1.0]).all()
     os.remove(".batoms.blend")
 
     bpy.ops.batoms.delete()
