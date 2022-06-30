@@ -27,7 +27,7 @@ def test_boundary():
             "bonds": {
                 "show_search": True,
             },
-            "polyhedras": {"setting": {"Ti": {"color": [0, 0.5, 0.5, 0.5]}}},
+            "polyhedra": {"settings": {"Ti": {"color": [0, 0.5, 0.5, 0.5]}}},
         }
     )
     render(atoms, save_blender_file=True, **config)

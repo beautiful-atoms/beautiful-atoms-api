@@ -23,7 +23,7 @@ def test_cs():
             "cavity": {
                 "resolution": 0.25,
                 "minRadius": 0.5,
-                "setting": {
+                "settings": {
                     "1": {
                         "min": 0.5,
                         "max": 3.0,

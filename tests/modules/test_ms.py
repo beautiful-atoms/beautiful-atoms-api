@@ -19,8 +19,8 @@ def test_ms():
     config["settings"].update(
         {
             "model_style": 1,
-            "ms": {
-                "setting": {
+            "molecular_surface": {
+                "settings": {
                     "1": {"type": "SAS", "probe": 1.0, "color": [1, 1, 0, 0.5]},
                     "2": {"type": "SES", "resolution": 0.25, "color": [0, 0, 0.8, 0.5]},
                 },
@@ -31,13 +31,21 @@ def test_ms():
     render(atoms, save_blender_file=True, display=False, **config)
     with load_blender_file() as do:
         batoms = do["batoms"]
-        assert len(batoms.ms.setting) == 2
-        assert batoms.ms.setting["1"].type == "SAS"
-        assert batoms.ms.setting["2"].type == "SES"
-        assert batoms.ms.setting["1"].resolution == pytest.approx(0.5, 1.0e-4)
-        assert batoms.ms.setting["2"].resolution == pytest.approx(0.25, 1.0e-4)
-        assert batoms.ms.setting["1"].probe == pytest.approx(1.0, 1.0e-4)
-        assert batoms.ms.setting["2"].probe == pytest.approx(1.4, 1.0e-4)
+        assert len(batoms.molecular_surface.settings) == 2
+        assert batoms.molecular_surface.settings["1"].type == "SAS"
+        assert batoms.molecular_surface.settings["2"].type == "SES"
+        assert batoms.molecular_surface.settings["1"].resolution == pytest.approx(
+            0.5, 1.0e-4
+        )
+        assert batoms.molecular_surface.settings["2"].resolution == pytest.approx(
+            0.25, 1.0e-4
+        )
+        assert batoms.molecular_surface.settings["1"].probe == pytest.approx(
+            1.0, 1.0e-4
+        )
+        assert batoms.molecular_surface.settings["2"].probe == pytest.approx(
+            1.4, 1.0e-4
+        )
 
     os.remove(".batoms.blend")
 

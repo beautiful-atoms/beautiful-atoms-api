@@ -21,8 +21,8 @@ def test_polyhedras():
     config["settings"].update(
         {
             "model_style": 2,
-            "bonds": {"show_search": True},
-            "polyhedras": {"setting": {"Ti": {"color": [1, 0, 1, 0.5]}}},
+            "bond": {"show_search": True},
+            "polyhedra": {"settings": {"Ti": {"color": [1, 0, 1, 0.5]}}},
         }
     )
     render(atoms, save_blender_file=True, **config)
@@ -43,13 +43,13 @@ def test_bond_search():
 
     atoms = read(data_path / "tio2.cif")
     config = base_config.copy()
-    config["settings"].update({"model_style": 2, "bonds": {"show_search": False}})
+    config["settings"].update({"model_style": 2, "bond": {"show_search": False}})
     render(atoms, save_blender_file=True, **config)
     # Check if the real material assigned is the same color
     with load_blender_file() as do:
         batoms = do["batoms"]
-        assert batoms.bonds.show_search is False
-        bond_search_obj = batoms.bonds.search_bond.obj
+        assert batoms.bond.show_search is False
+        bond_search_obj = batoms.bond.search_bond.obj
         att = get_gn_attributes(bond_search_obj, "show")
         # When search_bond not set, the value is an empty list
         assert len(att) == 0
@@ -57,13 +57,13 @@ def test_bond_search():
     bpy.ops.batoms.delete()
 
     # Enable the search_bond
-    config["settings"]["bonds"]["show_search"] = True
+    config["settings"]["bond"]["show_search"] = True
     render(atoms, save_blender_file=True, **config)
     # Check if the real material assigned is the same color
     with load_blender_file() as do:
         batoms = do["batoms"]
-        assert batoms.bonds.show_search is True
-        bond_search_obj = batoms.bonds.search_bond.obj
+        assert batoms.bond.show_search is True
+        bond_search_obj = batoms.bond.search_bond.obj
         att = get_gn_attributes(bond_search_obj, "show")
         # Currently att is not persistent
         # assert len(att) == 7

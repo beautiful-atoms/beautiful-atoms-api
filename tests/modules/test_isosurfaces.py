@@ -20,8 +20,8 @@ def test_isosurfaces():
     config["settings"].update(
         {
             "model_style": 1,
-            "isosurfaces": {
-                "setting": {
+            "isosurface": {
+                "settings": {
                     "1": {"level": -0.001, "color": [1, 1, 0, 0.5]},
                     "2": {"level": 0.001, "color": [0, 1, 1, 0.5]},
                 },
@@ -34,7 +34,7 @@ def test_isosurfaces():
     with load_blender_file() as do:
         batoms = do["batoms"]
         label = batoms.label
-        assert len(batoms.isosurfaces.setting) == 2
+        assert len(batoms.isosurface.settings) == 2
         iso1 = batoms.coll.objects[f"{label}_isosurface_1"]
         iso2 = batoms.coll.objects[f"{label}_isosurface_2"]
         c1, c2 = get_material_color(iso1), get_material_color(iso2)
@@ -54,17 +54,17 @@ def test_isosurfaces_multi():
     config["settings"].update(
         {
             "model_style": 1,
-            "isosurfaces": {"setting": {}, "draw": True},
+            "isosurface": {"settings": {}, "draw": True},
         }
     )
     levels = [-0.001, -0.005, -0.01, -0.02, -0.05]
     for i in range(5):
-        config["settings"]["isosurfaces"]["setting"][str(i)] = {
+        config["settings"]["isosurface"]["settings"][str(i)] = {
             "level": levels[i],
             "color": [1, 1, 0, 0.2],
         }
     for i in range(5, 10):
-        config["settings"]["isosurfaces"]["setting"][str(i)] = {
+        config["settings"]["isosurface"]["settings"][str(i)] = {
             "level": -levels[i - 5],
             "color": [0, 1, 1, 0.2],
         }
@@ -74,7 +74,7 @@ def test_isosurfaces_multi():
     with load_blender_file() as do:
         batoms = do["batoms"]
         label = batoms.label
-        assert len(batoms.isosurfaces.setting) == 10
+        assert len(batoms.isosurface.settings) == 10
         for i in range(5):
             iso = batoms.coll.objects[f"{label}_isosurface_{i}"]
             c = get_material_color(iso)

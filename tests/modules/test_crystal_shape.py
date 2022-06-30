@@ -20,7 +20,7 @@ def test_cs():
         {
             "model_style": 0,
             "crystal_shape": {
-                "setting": {
+                "settings": {
                     "(1, 1, 1)": {
                         "distance": 6,
                         "color": [0, 0.8, 0, 1],
@@ -46,12 +46,12 @@ def test_cs():
     with load_blender_file() as do:
         batoms = do["batoms"]
         # 8 symmetries of 111 + 12 symmetries of -110
-        assert len(batoms.crystal_shape.setting) == 20
+        assert len(batoms.crystal_shape.settings) == 20
         # Non-exhaustive, just to check symbol
-        assert batoms.crystal_shape.setting.find("1-1-1") is not None
-        assert batoms.crystal_shape.setting.find("-1-1-1") is not None
-        assert batoms.crystal_shape.setting.find("-1-1-0") is not None
-        assert batoms.crystal_shape.setting.find("-1--1-0") is not None
+        assert batoms.crystal_shape.settings.find("1-1-1") is not None
+        assert batoms.crystal_shape.settings.find("-1-1-1") is not None
+        assert batoms.crystal_shape.settings.find("-1-1-0") is not None
+        assert batoms.crystal_shape.settings.find("-1--1-0") is not None
 
     os.remove(".batoms.blend")
 

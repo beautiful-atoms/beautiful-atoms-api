@@ -20,7 +20,7 @@ def test_lp():
         {
             "model_style": 0,
             "lattice_plane": {
-                "setting": {
+                "settings": {
                     "(1, 1, 1)": {"distance": 3, "scale": 2.0},
                     "(1, 1, 0)": {
                         "distance": 2,
@@ -35,21 +35,21 @@ def test_lp():
     render(atoms, save_blender_file=True, display=False, **config)
     with load_blender_file() as do:
         batoms = do["batoms"]
-        assert len(batoms.lattice_plane.setting) == 2
-        assert batoms.lattice_plane.setting[(1, 1, 1)].distance == pytest.approx(
+        assert len(batoms.lattice_plane.settings) == 2
+        assert batoms.lattice_plane.settings[(1, 1, 1)].distance == pytest.approx(
             3.0, 1.0e-4
         )
-        assert batoms.lattice_plane.setting[(1, 1, 0)].distance == pytest.approx(
+        assert batoms.lattice_plane.settings[(1, 1, 0)].distance == pytest.approx(
             2.0, 1.0e-4
         )
-        assert batoms.lattice_plane.setting[(1, 1, 1)].scale == pytest.approx(
+        assert batoms.lattice_plane.settings[(1, 1, 1)].scale == pytest.approx(
             2.0, 1.0e-4
         )
-        assert batoms.lattice_plane.setting[(1, 1, 0)].scale == pytest.approx(
+        assert batoms.lattice_plane.settings[(1, 1, 0)].scale == pytest.approx(
             1.5, 1.0e-4
         )
-        assert batoms.lattice_plane.setting[(1, 1, 1)].slicing is False
-        assert batoms.lattice_plane.setting[(1, 1, 0)].slicing is False
+        assert batoms.lattice_plane.settings[(1, 1, 1)].slicing is False
+        assert batoms.lattice_plane.settings[(1, 1, 0)].slicing is False
 
     os.remove(".batoms.blend")
 
@@ -65,7 +65,7 @@ def test_lp_material():
         {
             "model_style": 0,
             "lattice_plane": {
-                "setting": {
+                "settings": {
                     "(1, 0, 0)": {
                         "distance": 1,
                         "color": [0.8, 0, 0.6, 0.95],
