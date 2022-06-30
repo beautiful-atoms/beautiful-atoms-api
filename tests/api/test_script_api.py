@@ -84,13 +84,13 @@ def test_apply_batoms_settings():
     assert all([c == 1.0 for c in batoms.species["C"].color])
 
     # Test 4: set properties with tuple keys
-    config = {"bond": {"setting": {("C", "H"): {"polyhedra": True}}}}
+    config = {"bond": {"settings": {("C", "H"): {"polyhedra": True}}}}
     apply_batoms_settings(batoms, settings=config)
     # cycles changed to capital
     assert batoms.bonds.setting[("C", "H")].polyhedra is True
 
     # Test 4-1: raw string of tuple keys --> exception
-    config = {"bond": {"setting": {'("C", "H")': {"polyhedra": False}}}}
+    config = {"bond": {"settings": {'("C", "H")': {"polyhedra": False}}}}
     with pytest.raises(Exception):
         apply_batoms_settings(batoms, settings=config)
 

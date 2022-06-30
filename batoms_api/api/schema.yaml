@@ -58,7 +58,7 @@ settings:
   bond:
     show_hydrogen_bond: { _type: _bool }
     show_search: { _type: _bool }
-    setting:
+    settings:
       _any:
         _eval_key: true
         max: { _type: _float }
@@ -70,7 +70,7 @@ settings:
         width: { _type: _float }
 
   polyhedra:
-    setting:
+    settings:
       _any:
         show_edge: { _type: _bool }
         flag: { _type: _bool }
@@ -79,13 +79,14 @@ settings:
         material_style: { _type: _str, _disabled: true }
 
   isosurface:
-    setting:
+    settings:
       _any:
         level: { _type: _float }
         color: { _type: _list }
     draw: { _type: _bool }
+  
   lattice_plane:
-    setting:
+    settings:
       _any:
         _eval_key: true
         boundary: { _type: _bool }
@@ -99,7 +100,7 @@ settings:
     draw: { _type: _bool }
 
   crystal_shape:
-    setting:
+    settings:
       _any:
         _eval_key: true
         crystal: { _type: _bool }
@@ -114,7 +115,7 @@ settings:
     draw: { _type: _bool }
 
   molecular_surface:
-    setting:
+    settings:
       _any:
         type: { _type: _str }
         color: { _type: _list }
@@ -125,7 +126,7 @@ settings:
   cavity:
     resolution: { _type: _float }
     minRadius: { _type: _float }
-    setting:
+    settings:
       _any:
         color: { _type: _list }
         flag: { _type: _bool }

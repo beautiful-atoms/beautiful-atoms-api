@@ -12,7 +12,7 @@ settings:
     H:
       material_style: "plastic"
   bond:
-    setting:
+    settings:
       ("C", "H"):
         order: 2
         polyhedra: true
