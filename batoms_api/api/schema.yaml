@@ -55,7 +55,7 @@ settings:
       segments: { _disabled: true }
     update: { _type: _bool }
 
-  bonds:
+  bond:
     show_hydrogen_bond: { _type: _bool }
     show_search: { _type: _bool }
     setting:
@@ -69,7 +69,7 @@ settings:
         style: { _type: [_int, _str] }
         width: { _type: _float }
 
-  polyhedras:
+  polyhedra:
     setting:
       _any:
         show_edge: { _type: _bool }
@@ -78,7 +78,7 @@ settings:
         width: { _type: _float }
         material_style: { _type: _str, _disabled: true }
 
-  isosurfaces:
+  isosurface:
     setting:
       _any:
         level: { _type: _float }
@@ -113,7 +113,7 @@ settings:
         width: { _type: _float }
     draw: { _type: _bool }
 
-  ms:
+  molecular_surface:
     setting:
       _any:
         type: { _type: _str }

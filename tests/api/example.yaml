@@ -11,7 +11,7 @@ settings:
       material_style: "metallic"
     H:
       material_style: "plastic"
-  bonds:
+  bond:
     setting:
       ("C", "H"):
         order: 2
