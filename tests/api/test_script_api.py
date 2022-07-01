@@ -87,12 +87,35 @@ def test_apply_batoms_settings():
     config = {"bond": {"settings": {("C", "H"): {"polyhedra": True}}}}
     apply_batoms_settings(batoms, settings=config)
     # cycles changed to capital
-    assert batoms.bonds.setting[("C", "H")].polyhedra is True
+    assert batoms.bond.settings[("C", "H")].polyhedra is True
 
     # Test 4-1: raw string of tuple keys --> exception
     config = {"bond": {"settings": {'("C", "H")': {"polyhedra": False}}}}
     with pytest.raises(Exception):
         apply_batoms_settings(batoms, settings=config)
+
+    # Test 5: special cell parameter
+    config = {"cell": [8, 8, 8]}
+    apply_batoms_settings(batoms, settings=config)
+    assert batoms.cell[0][0] == pytest.approx(8, 1.0e-5)
+
+    # Test 5-1: setting cell parameter and sub-attributs
+    config = {"cell": {"_value": [10, 10, 10], "width": 0.1}}
+    apply_batoms_settings(batoms, settings=config)
+    assert batoms.cell[0][0] == pytest.approx(10, 1.0e-5)
+    assert batoms.cell.width == pytest.approx(0.1, 1.0e-5)
+
+    # Test 5-2: setting cell, only _value part
+    config = {"cell": {"_value": [15, 15, 15]}}
+    apply_batoms_settings(batoms, settings=config)
+    assert batoms.cell[0][0] == pytest.approx(15, 1.0e-5)
+    assert batoms.cell.width == pytest.approx(0.1, 1.0e-5)
+
+    # Test 5-3: setting cell, only sub-attribute part
+    config = {"cell": {"width": 0.5}}
+    apply_batoms_settings(batoms, settings=config)
+    assert batoms.cell[0][0] == pytest.approx(15, 1.0e-5)
+    assert batoms.cell.width == pytest.approx(0.5, 1.0e-5)
 
 
 def test_apply_batoms_modifications():

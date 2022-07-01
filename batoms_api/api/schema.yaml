@@ -22,7 +22,10 @@ render_input:
 settings:
   label: { _disabled: true }
   boundary: { _type: [_list, _float] }
-  cell: { _type: _list }
+  cell:
+    _value: { _type: _list }
+    color: { _type: _list }
+    width: { _type: _float }
   color_style: { _type: [_str, _int] }
   location: { _type: _list, _edit_member: false }
   model_style: { _type: _int }
@@ -84,7 +87,7 @@ settings:
         level: { _type: _float }
         color: { _type: _list }
     draw: { _type: _bool }
-  
+
   lattice_plane:
     settings:
       _any:

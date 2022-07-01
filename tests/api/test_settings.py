@@ -68,6 +68,37 @@ def test_dict_set():
     assert "bonds" not in output["settings"].keys()
 
 
+def test_multilevel_assign():
+    """Test if the the dict allow"""
+    from batoms_api.batoms_api import set_dict, default_schema
+
+    output = {}
+    set_dict(
+        {"settings": {"cell": [10, 10, 10]}},
+        output,
+        default_schema,
+    )
+    assert "_value" in output["settings"]["cell"].keys()
+    assert all([v == 10 for v in output["settings"]["cell"]["_value"]])
+
+    output = {}
+    set_dict(
+        {
+            "settings": {
+                "cell": {
+                    "_value": [10, 10, 10],
+                    "width": 0.02,
+                }
+            }
+        },
+        output,
+        default_schema,
+    )
+    assert "_value" in output["settings"]["cell"].keys()
+    assert all([v == 10 for v in output["settings"]["cell"]["_value"]])
+    assert output["settings"]["cell"]["width"] == 0.02
+
+
 def test_disabled_vals():
     from batoms_api.batoms_api import set_dict, default_schema
 

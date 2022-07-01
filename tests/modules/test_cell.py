@@ -18,8 +18,7 @@ def test_cell():
     atoms = read(data_path / "tio2.cif")
     config = base_config.copy()
 
-    # 1. Normal cell, not drawing cell
-    # TODO: test draw_unit_cell later
+    # Test 1. Normal cell, not drawing cell
     config["settings"].update(
         {
             "model_style": 2,
@@ -33,7 +32,7 @@ def test_cell():
     with load_blender_file() as do:
         batoms = do["batoms"]
         assert batoms.model_style == 2
-        c_polyhedra = get_material_color(batoms.polyhedras.obj)
+        c_polyhedra = get_material_color(batoms.polyhedra.obj)
         assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
         with pytest.raises((KeyError, AttributeError)):
             cc = batoms.cell.obj_cylinder
@@ -41,19 +40,22 @@ def test_cell():
 
     bpy.ops.batoms.delete()
 
-    # Test 2: add cell drawing (currently manual)
-    # TODO: test show_unit_cell
-    config["post_modifications"] = ["batoms.cell.draw()"]
+    # Test 2: add cell
+    config["settings"].update({"cell": {"width": 0.1, "color": [1.0, 0, 0, 1.0]}})
     render(atoms, save_blender_file=True, **config)
     with load_blender_file() as do:
         batoms = do["batoms"]
-        assert batoms.model_style == 2
-        c_polyhedra = get_material_color(batoms.polyhedras.obj)
-        assert np.isclose(c_polyhedra, [0, 0.5, 0.5, 0.5]).all()
-        # The new Bcells from v2.2.0 up has cancelled usage of obj_cylinder
-        # cc = batoms.cell.obj_cylinder
-        # c_cell = get_material_color(cc)
-        # assert np.isclose(c_cell, [0, 0, 0, 1.0]).all()
+        assert batoms.cell.width == pytest.approx(0.1, 1.0e-4)
+        cc = batoms.cell.obj
+        c_cell = get_material_color(cc)
+        assert np.isclose(c_cell, [1.0, 0, 0, 1.0]).all()
+
+    #  Test 3: do not show cell
+    config["settings"].update({"show_unit_cell": False})
+    render(atoms, save_blender_file=True, **config)
+    with load_blender_file() as do:
+        batoms = do["batoms"]
+        assert batoms.cell.hide is True
     os.remove(".batoms.blend")
 
     bpy.ops.batoms.delete()
