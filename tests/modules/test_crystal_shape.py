@@ -52,10 +52,11 @@ def test_cs():
         assert batoms.crystal_shape.settings.find("-1-1-1") is not None
         assert batoms.crystal_shape.settings.find("-1-1-0") is not None
         assert batoms.crystal_shape.settings.find("-1--1-0") is not None
-
     os.remove(".batoms.blend")
+
+    # Test 2: disable render
 
 
 if __name__ == "__main__":
     test_cs()
-    print("\n ms: All pass! \n")
+    print("\n cs: All pass! \n")
