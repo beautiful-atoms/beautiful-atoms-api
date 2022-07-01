@@ -67,7 +67,7 @@ def test_bond_search():
         att = get_gn_attributes(bond_search_obj, "show")
         # Starting from v2.2.0 the attributes in GN is saved to .blend file
         assert len(att) == 7
-    # os.remove(".batoms.blend")
+    os.remove(".batoms.blend")
     bpy.ops.batoms.delete()
 
 
