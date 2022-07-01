@@ -112,6 +112,31 @@ def apply_batoms_settings(batoms, settings={}, schema=default_schema["settings"]
             # Determine if we have eached the leaf node
             if "_disabled" in sub_schema.keys():
                 warn(f"Key {key} is disabled in current scope, ignore.")
+            # Some properties, like `batoms.cell`, may be directly set via assignment
+            # while further allowing sub-property assignment
+            # for example:
+            # 1. Direct assignment: `{"settings": {"cell": [1, 1, 1]}}`
+            # 2. Use a key `_value` to redirect value assignment:
+            #    `{"settings": {"cell": { "_value": [1, 1, 1], "width": 0.1 }}}`
+            elif "_value" in sub_schema.keys():
+                # Case 1: direct assignment, use _value._type of _schema
+                if not isinstance(val, (dict,)):
+                    setattr(obj, key, val)
+                    logger.debug(f"Setting property '{key}' of {type(obj)} to {val}")
+                # Case 2: has sub-attributes, assign _value directly to the object
+                else:
+                    assign_value = val.pop("_value", None)
+                    if assign_value:
+                        setattr(obj, key, assign_value)
+                        logger.debug(
+                            f"Setting property '{key}' of {type(obj)} to {assign_value}"
+                        )
+                    if len(val) > 0:
+                        logger.debug(
+                            f"Property '{key}' of {type(obj)} has settable attributes."
+                        )
+                        sub_setting = val.copy()
+                        modify(sub_obj, sub_setting, sub_schema.copy(), draw_list)
             elif "_type" in sub_schema.keys():
                 # Reached a leaf node
                 if key not in ["draw"]:

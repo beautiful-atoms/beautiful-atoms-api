@@ -73,13 +73,19 @@ def set_dict(raw_dict, output_dict, schema):
                 sub_schema = schema["_any"]
         else:
             sub_schema = schema[key]
+
+        # If the key: value is direct assignment but key also has settable sub-attributes,
+        # move the value to key._value (for example, `batoms.cell`)
+        if "_value" in sub_schema.keys():
+            if not isinstance(value, (dict,)):
+                value = {"_value": value}
         # breakpoint()
         # Determine if we have eached the leaf node
         if "_disabled" in sub_schema.keys():
             warn(f"Key {key} is disabled in current scope, ignore.")
+        # Special example for things like batoms.cell
         elif "_type" in sub_schema.keys():
             allowed_type = sub_schema["_type"]
-            # Reached a leaf node
             output_dict[key] = type_check(value, allowed_type)
         else:
             # Walk the dictionary

@@ -65,8 +65,8 @@ def test_bond_search():
         assert batoms.bond.show_search is True
         bond_search_obj = batoms.bond.search_bond.obj
         att = get_gn_attributes(bond_search_obj, "show")
-        # Currently att is not persistent
-        # assert len(att) == 7
+        # Starting from v2.2.0 the attributes in GN is saved to .blend file
+        assert len(att) == 7
     os.remove(".batoms.blend")
     bpy.ops.batoms.delete()
 
